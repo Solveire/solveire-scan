@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Solveire Scan V9</title>
+<style>
+:root{
+  --green:#0c4338;
+  --lime:#b8f532;
+  --cream:#f6f8f3;
+  --white:#fff;
+  --line:#e2e7df;
+  --soft:#eef5e5;
+  --muted:#758079;
+  --text:#173a33;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--cream);color:var(--text);font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+a{text-decoration:none;color:inherit}
+button,input{font:inherit}
+button{cursor:pointer}
+.shell{min-height:100vh;padding-bottom:74px}
+.topbar{
+  height:68px;background:#fff;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:flex-start;
+  padding:0 18px;position:sticky;top:0;z-index:30
+}
+.top-left{display:flex;align-items:center;gap:12px}
+
+.brand{font-size:13px;font-weight:800;letter-spacing:3px;color:var(--green)}
+.divider{width:1px;height:22px;background:var(--line)}
+.sub{font-size:10px;letter-spacing:2px;font-weight:700;color:#8b938f}
+.top-btn{border:0;border-radius:9px;background:var(--lime);padding:10px 13px;font-size:11px;font-weight:750;color:var(--text)}
+.main{padding:22px 16px 36px;max-width:1180px;margin:0 auto}
+.header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px}
+.header h1{margin:0;font-size:26px;letter-spacing:-1px;line-height:1.05}
+.header p{margin:7px 0 0;font-size:11px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px}
+.card-pad{padding:18px}
+.scan-card{padding:20px}
+.eyebrow{font-size:8px;letter-spacing:1.2px;text-transform:uppercase;color:#7f8983;font-weight:800;margin-bottom:8px}
+.scan-card h2{font-size:18px;margin:0 0 5px;letter-spacing:-.5px}
+.scan-card p{font-size:10px;color:var(--muted);margin:0 0 16px;line-height:1.5}
+.url-row{display:flex;gap:8px}
+.url-row input{
+  flex:1;height:42px;border:1px solid var(--line);border-radius:9px;
+  padding:0 12px;font-size:12px;color:var(--text);outline:none
+}
+.url-row input:focus{border-color:#9dafaa;box-shadow:0 0 0 3px rgba(12,67,56,.05)}
+.btn{border:0;border-radius:9px;padding:11px 14px;font-size:11px;font-weight:750}
+.btn-primary{background:var(--lime);color:var(--text)}
+.btn-secondary{background:#fff;border:1px solid var(--line);color:var(--text)}
+.progress-wrap{margin-top:18px;border-top:1px solid var(--line);padding-top:16px;display:none}
+.progress-wrap.active{display:block}
+.progress-bar{height:8px;background:#eef1ed;border-radius:99px;overflow:hidden}
+.progress-bar span{display:block;height:100%;width:0;background:var(--green);transition:width .45s ease}
+.steps{margin-top:14px;display:grid;gap:8px}
+.step{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#fbfcfa;
+  font-size:10px
+}
+.step-left{display:flex;align-items:center;gap:9px}
+.dot{width:22px;height:22px;border-radius:50%;background:#eef2ed;display:grid;place-items:center;font-size:9px;color:#768079}
+.step.done .dot{background:var(--soft);color:var(--green);font-weight:800}
+.step.running{border-color:#b7c5bd;background:#f9fbf7}
+.step.running .dot{background:var(--green);color:#fff}
+.status{font-size:9px;color:#8a928e}
+.step.done .status{color:var(--green);font-weight:700}
+
+.sidebar{padding:18px;position:sticky;top:86px}
+.sidebar h3{font-size:13px;margin:0 0 10px}
+.side-note{font-size:9px;color:var(--muted);line-height:1.5;margin-bottom:12px}
+.badge{display:inline-flex;padding:6px 9px;border-radius:999px;background:var(--soft);font-size:9px;font-weight:700;color:var(--green)}
+.side-list{margin-top:14px;border-top:1px solid var(--line)}
+.side-row{padding:10px 0;border-bottom:1px solid var(--line);font-size:9px;color:#51615b;display:flex;justify-content:space-between;gap:10px}
+.side-row strong{font-size:9px;color:var(--text)}
+
+.result{display:none;margin-top:16px}
+.result.active{display:block}
+.result-top{display:grid;grid-template-columns:170px 1fr;gap:16px}
+.score-box{background:var(--green);border-radius:14px;padding:18px;color:#fff}
+.score-num{font-size:50px;line-height:.95;letter-spacing:-3px;color:var(--lime);font-weight:750}
+.score-num span{font-size:16px;color:rgba(255,255,255,.45);letter-spacing:0}
+.score-label{font-size:11px;font-weight:700;margin-top:6px}
+.score-sub{font-size:9px;color:rgba(255,255,255,.6);margin-top:3px}
+.summary-card{padding:18px}
+.summary-card h3{margin:0 0 9px;font-size:14px}
+.summary-card p{font-size:10px;color:#4d5b55;line-height:1.55;margin:0}
+.score-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}
+.metric{padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff}
+.metric .m-label{font-size:8px;color:#7d8781;text-transform:uppercase;letter-spacing:.8px;font-weight:700}
+.metric .m-score{font-size:18px;font-weight:750;margin-top:8px;color:var(--green)}
+.metric .m-score span{font-size:9px;color:#89918d;font-weight:600}
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.review-card{padding:16px}
+.review-card h3{font-size:13px;margin:0 0 10px}
+.item{padding:10px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+.item strong{display:block;font-size:10px;margin-bottom:3px}
+.item p{margin:0;font-size:9px;color:var(--muted);line-height:1.45}
+.actions{display:flex;gap:8px;margin-top:12px}
+
+.bottom-nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;
+  background:rgba(255,255,255,.98);border-top:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(5,1fr);
+  padding:8px 8px calc(8px + env(safe-area-inset-bottom));backdrop-filter:blur(12px)
+}
+.bottom-nav button{border:0;background:transparent;color:#53675f;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 2px}
+.bottom-nav span{width:34px;height:28px;border-radius:9px;display:grid;place-items:center;font-size:15px}
+.bottom-nav small{font-size:8px}
+.bottom-nav button.active{color:var(--green);font-weight:700}
+.bottom-nav button.active span{background:#eef7df}
+
+@media(max-width:820px){
+  .grid{grid-template-columns:1fr}
+  .sidebar{position:static}
+}
+@media(max-width:640px){
+  .header h1{font-size:24px}
+  .url-row{flex-direction:column}
+  .url-row input,.url-row .btn{width:100%}
+  .result-top{grid-template-columns:1fr}
+  .score-grid{grid-template-columns:repeat(2,1fr)}
+  .review-grid{grid-template-columns:1fr}
+  .sidebar{display:none}
+}
+
+.score-stack{display:grid;gap:8px}
+.score-kicker{font-size:8px;text-transform:uppercase;letter-spacing:1px;font-weight:800;color:rgba(255,255,255,.55);margin-bottom:8px}
+.opportunity-box{border:1px solid #dce5d6;background:#fff;border-radius:14px;padding:16px}
+.opportunity-box .score-kicker{color:#7b8680}
+.opportunity-score{font-size:34px;line-height:1;font-weight:800;letter-spacing:-2px;color:var(--green)}
+.opportunity-score span{font-size:12px;letter-spacing:0;color:#87918b}
+.opportunity-label{font-size:11px;font-weight:800;margin-top:7px;color:var(--green)}
+.opportunity-note{font-size:9px;color:var(--muted);margin-top:3px}
+.opportunity-detail{padding:16px;margin-top:12px}
+.opportunity-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.opportunity-head h3{font-size:13px;margin:0}
+.priority-pill{white-space:nowrap;background:#eef7df;color:var(--green);border-radius:999px;padding:7px 9px;font-size:9px;font-weight:800}
+.opportunity-metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:13px}
+.opportunity-metrics>div{border:1px solid var(--line);border-radius:9px;padding:10px;background:#fbfcfa}
+.opportunity-metrics span{display:block;font-size:8px;color:#7d8781;line-height:1.3}
+.opportunity-metrics strong{display:block;font-size:13px;color:var(--green);margin-top:6px}
+.opportunity-copy{font-size:9px;color:var(--muted);line-height:1.55;margin:12px 0 0}
+@media(max-width:640px){
+ .opportunity-metrics{grid-template-columns:repeat(2,1fr)}
+ .opportunity-head{align-items:center}
+}
+
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="top-left">
+      
+      <div class="brand">SOLVEIRE</div>
+      <div class="divider"></div>
+      <div class="sub">SCAN</div>
+    </div>
+
+  </header>
+
+  <main class="main">
+    <div class="header">
+      <div>
+        <h1>Website scannen</h1>
+        <p>Voer een URL in. Solveire analyseert de belangrijkste commerciële en technische signalen.</p>
+      </div>
+    </div>
+
+    <div class="grid">
+      <section>
+        <div class="card scan-card">
+          <div class="eyebrow">Automatische scan</div>
+          <h2>Start een nieuwe analyse</h2>
+          <p>Plak de URL hieronder. Solveire bouwt daarna automatisch de volledige websitebeoordeling op.</p>
+
+          <div class="url-row">
+            <input id="urlInput" type="url" placeholder="https://bedrijf.nl">
+            <button class="btn btn-primary" id="startScan">Start automatische scan</button>
+          </div>
+
+          <div class="progress-wrap" id="progressWrap">
+            <div class="progress-bar"><span id="progressBar"></span></div>
+            <div class="steps">
+              <div class="step" data-step="0"><div class="step-left"><div class="dot">1</div><div>Website ophalen</div></div><div class="status">Wachten</div></div>
+              <div class="step" data-step="1"><div class="step-left"><div class="dot">2</div><div>Belangrijkste pagina’s analyseren</div></div><div class="status">Wachten</div></div>
+              <div class="step" data-step="2"><div class="step-left"><div class="dot">3</div><div>Mobiele ervaring beoordelen</div></div><div class="status">Wachten</div></div>
+              <div class="step" data-step="3"><div class="step-left"><div class="dot">4</div><div>Conversie en vertrouwen analyseren</div></div><div class="status">Wachten</div></div>
+              <div class="step" data-step="4"><div class="step-left"><div class="dot">5</div><div>SEO-signalen controleren</div></div><div class="status">Wachten</div></div>
+              <div class="step" data-step="5"><div class="step-left"><div class="dot">6</div><div>Rapport opbouwen</div></div><div class="status">Wachten</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="result" id="result">
+          <div class="result-top">
+            <div class="score-stack">
+              <div class="score-box">
+                <div class="score-kicker">Website score</div>
+                <div class="score-num">57<span>/100</span></div>
+                <div class="score-label">Ruimte voor groei</div>
+              </div>
+              <div class="opportunity-box">
+                <div class="score-kicker">Solveire Opportunity</div>
+                <div class="opportunity-score">86<span>/100</span></div>
+                <div class="opportunity-label">Prioriteit</div>
+                <div class="opportunity-note">Sterke Maatwerk-match</div>
+              </div>
+            </div>
+            <div class="card summary-card">
+              <h3>Grootste kans</h3>
+              <p>Het bedrijf laat sterk werk zien, maar belangrijke bewijs- en conversie-elementen komen nog te laat in beeld. Hierdoor is de route van eerste indruk naar aanvraag minder sterk dan mogelijk.</p>
+            </div>
+          </div>
+
+          <div class="score-grid">
+            <div class="metric"><div class="m-label">Eerste indruk</div><div class="m-score">15<span>/20</span></div></div>
+            <div class="metric"><div class="m-label">Mobiel</div><div class="m-score">10<span>/20</span></div></div>
+            <div class="metric"><div class="m-label">Vertrouwen</div><div class="m-score">11<span>/20</span></div></div>
+            <div class="metric"><div class="m-label">Conversie</div><div class="m-score">9<span>/20</span></div></div>
+            <div class="metric"><div class="m-label">Vindbaarheid</div><div class="m-score">12<span>/20</span></div></div>
+          </div>
+
+          <div class="review-grid">
+            <div class="card review-card">
+              <h3>3 verbeterpunten</h3>
+              <div class="item"><strong>1. Projectresultaten eerder tonen</strong><p>Gebruik bewijs eerder in de klantreis.</p></div>
+              <div class="item"><strong>2. Mobiele aanvraagroute verkorten</strong><p>Maak de primaire CTA sneller bereikbaar.</p></div>
+              <div class="item"><strong>3. Werkgebied prominenter maken</strong><p>Maak direct duidelijk voor welke regio het bedrijf werkt.</p></div>
+            </div>
+            <div class="card review-card">
+              <h3>Wat al sterk staat</h3>
+              <div class="item"><strong>Eigen projectfotografie</strong><p>Visueel bewijs van echt uitgevoerd werk.</p></div>
+              <div class="item"><strong>Duidelijk dienstenaanbod</strong><p>De kernpropositie is inhoudelijk goed herkenbaar.</p></div>
+              <div class="item"><strong>Goede basis voor SEO</strong><p>Er is voldoende relevante content om op verder te bouwen.</p></div>
+            </div>
+          </div>
+
+          <div class="card opportunity-detail">
+            <div class="opportunity-head">
+              <div>
+                <div class="eyebrow">Interne leadbeoordeling</div>
+                <h3>Waarom is dit een interessante prospect?</h3>
+              </div>
+              <span class="priority-pill">🔥 Prioriteit</span>
+            </div>
+            <div class="opportunity-metrics">
+              <div><span>Verbeterpotentie</span><strong>27/30</strong></div>
+              <div><span>Bedrijfskwaliteit</span><strong>21/25</strong></div>
+              <div><span>Tractie</span><strong>17/20</strong></div>
+              <div><span>Maatwerkpotentie</span><strong>13/15</strong></div>
+              <div><span>Bereikbaarheid</span><strong>8/10</strong></div>
+            </div>
+            <p class="opportunity-copy">De website laat duidelijke commerciële verbeterkansen zien, terwijl het bedrijf voldoende bewijs van activiteit en kwaliteit heeft. Daardoor is dit waarschijnlijk interessanter dan een bedrijf met alleen een slechte website.</p>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-secondary">Bewerken</button>
+            <button class="btn btn-primary">Goedkeuren en klantresultaat genereren</button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="card sidebar">
+        <div class="eyebrow">Scanstatus</div>
+        <h3>Automatische analyse</h3>
+        <div class="side-note">V9 toont nu de volledige workflow. De echte website-analyse koppelen we hierna via een backend.</div>
+        <span class="badge">Interne versie</span>
+        <div class="side-list">
+          <div class="side-row"><span>Analysemodus</span><strong>Automatisch</strong></div>
+          <div class="side-row"><span>Pagina’s</span><strong>5–10</strong></div>
+          <div class="side-row"><span>Beoordeling</span><strong>100 punten</strong></div>
+          <div class="side-row"><span>Goedkeuring nodig</span><strong>Ja</strong></div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <nav class="bottom-nav">
+    <button><span>⌂</span><small>Overzicht</small></button>
+    <button class="active"><span>▣</span><small>Scans</small></button>
+    <button><span>▦</span><small>Bedrijven</small></button>
+    <button><span>✉</span><small>Berichten</small></button>
+    <button><span>⚙</span><small>Instellingen</small></button>
+  </nav>
+</div>
+
+<script>
+const start=document.getElementById('startScan');
+const input=document.getElementById('urlInput');
+const wrap=document.getElementById('progressWrap');
+const bar=document.getElementById('progressBar');
+const result=document.getElementById('result');
+const steps=[...document.querySelectorAll('.step')];
+let busy=false;
+
+function reset(){
+  busy=false;
+  wrap.classList.remove('active');
+  result.classList.remove('active');
+  bar.style.width='0%';
+  steps.forEach(s=>{
+    s.classList.remove('done','running');
+    s.querySelector('.status').textContent='Wachten';
+  });
+  start.textContent='Start automatische scan';
+  start.disabled=false;
+}
+function runDemoScan(){
+  if(busy) return;
+  const url=input.value.trim();
+  if(!url){input.focus();return;}
+  busy=true;
+  result.classList.remove('active');
+  wrap.classList.add('active');
+  start.disabled=true;
+  start.textContent='Scannen...';
+  let i=0;
+  function next(){
+    if(i>0){
+      const prev=steps[i-1];
+      prev.classList.remove('running');
+      prev.classList.add('done');
+      prev.querySelector('.status').textContent='Klaar';
+    }
+    if(i<steps.length){
+      const current=steps[i];
+      current.classList.add('running');
+      current.querySelector('.status').textContent='Bezig';
+      bar.style.width=((i)/steps.length*100)+'%';
+      i++;
+      setTimeout(next,650);
+    }else{
+      bar.style.width='100%';
+      setTimeout(()=>{
+        busy=false;
+        start.disabled=false;
+        start.textContent='Opnieuw scannen';
+        result.classList.add('active');
+        result.scrollIntoView({behavior:'smooth',block:'start'});
+      },350);
+    }
+  }
+  next();
+}
+start.addEventListener('click',runDemoScan);
+input.addEventListener('keydown',e=>{if(e.key==='Enter')runDemoScan()});
+</script>
+</body>
+</html>
