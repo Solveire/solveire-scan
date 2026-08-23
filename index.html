@@ -20,7 +20,7 @@ html,body{margin:0;min-height:100%;background:var(--cream);color:var(--text);fon
 a{text-decoration:none;color:inherit}
 button,input{font:inherit}
 button{cursor:pointer}
-.shell{min-height:100vh;padding-bottom:74px}
+.shell{min-height:100vh}
 .topbar{
   height:68px;background:#fff;border-bottom:1px solid var(--line);
   display:flex;align-items:center;justify-content:flex-start;
@@ -30,19 +30,19 @@ button{cursor:pointer}
 
 .brand{font-size:13px;font-weight:800;letter-spacing:3px;color:var(--green)}
 .divider{width:1px;height:22px;background:var(--line)}
-.sub{font-size:10px;letter-spacing:2px;font-weight:700;color:#8b938f}
+.sub{font-size:13px;letter-spacing:2px;font-weight:700;color:#8b938f}
 .top-btn{border:0;border-radius:9px;background:var(--lime);padding:10px 13px;font-size:11px;font-weight:750;color:var(--text)}
 .main{padding:22px 16px 36px;max-width:1180px;margin:0 auto}
 .header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:18px}
 .header h1{margin:0;font-size:26px;letter-spacing:-1px;line-height:1.05}
-.header p{margin:7px 0 0;font-size:11px;color:var(--muted)}
+.header p{margin:7px 0 0;font-size:14px;color:var(--muted)}
 .grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
 .card{background:#fff;border:1px solid var(--line);border-radius:14px}
 .card-pad{padding:18px}
 .scan-card{padding:20px}
-.eyebrow{font-size:8px;letter-spacing:1.2px;text-transform:uppercase;color:#7f8983;font-weight:800;margin-bottom:8px}
+.eyebrow{font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:#7f8983;font-weight:800;margin-bottom:8px}
 .scan-card h2{font-size:18px;margin:0 0 5px;letter-spacing:-.5px}
-.scan-card p{font-size:10px;color:var(--muted);margin:0 0 16px;line-height:1.5}
+.scan-card p{font-size:13px;color:var(--muted);margin:0 0 16px;line-height:1.5}
 .url-row{display:flex;gap:8px}
 .url-row input{
   flex:1;height:42px;border:1px solid var(--line);border-radius:9px;
@@ -60,23 +60,23 @@ button{cursor:pointer}
 .step{
   display:flex;align-items:center;justify-content:space-between;gap:10px;
   padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#fbfcfa;
-  font-size:10px
+  font-size:13px
 }
 .step-left{display:flex;align-items:center;gap:9px}
-.dot{width:22px;height:22px;border-radius:50%;background:#eef2ed;display:grid;place-items:center;font-size:9px;color:#768079}
+.dot{width:22px;height:22px;border-radius:50%;background:#eef2ed;display:grid;place-items:center;font-size:12px;color:#768079}
 .step.done .dot{background:var(--soft);color:var(--green);font-weight:800}
 .step.running{border-color:#b7c5bd;background:#f9fbf7}
 .step.running .dot{background:var(--green);color:#fff}
-.status{font-size:9px;color:#8a928e}
+.status{font-size:12px;color:#8a928e}
 .step.done .status{color:var(--green);font-weight:700}
 
 .sidebar{padding:18px;position:sticky;top:86px}
 .sidebar h3{font-size:13px;margin:0 0 10px}
-.side-note{font-size:9px;color:var(--muted);line-height:1.5;margin-bottom:12px}
-.badge{display:inline-flex;padding:6px 9px;border-radius:999px;background:var(--soft);font-size:9px;font-weight:700;color:var(--green)}
+.side-note{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:12px}
+.badge{display:inline-flex;padding:6px 9px;border-radius:999px;background:var(--soft);font-size:12px;font-weight:700;color:var(--green)}
 .side-list{margin-top:14px;border-top:1px solid var(--line)}
-.side-row{padding:10px 0;border-bottom:1px solid var(--line);font-size:9px;color:#51615b;display:flex;justify-content:space-between;gap:10px}
-.side-row strong{font-size:9px;color:var(--text)}
+.side-row{padding:10px 0;border-bottom:1px solid var(--line);font-size:12px;color:#51615b;display:flex;justify-content:space-between;gap:10px}
+.side-row strong{font-size:12px;color:var(--text)}
 
 .result{display:none;margin-top:16px}
 .result.active{display:block}
@@ -85,22 +85,22 @@ button{cursor:pointer}
 .score-num{font-size:50px;line-height:.95;letter-spacing:-3px;color:var(--lime);font-weight:750}
 .score-num span{font-size:16px;color:rgba(255,255,255,.45);letter-spacing:0}
 .score-label{font-size:11px;font-weight:700;margin-top:6px}
-.score-sub{font-size:9px;color:rgba(255,255,255,.6);margin-top:3px}
+.score-sub{font-size:12px;color:rgba(255,255,255,.6);margin-top:3px}
 .summary-card{padding:18px}
 .summary-card h3{margin:0 0 9px;font-size:14px}
-.summary-card p{font-size:10px;color:#4d5b55;line-height:1.55;margin:0}
+.summary-card p{font-size:13px;color:#4d5b55;line-height:1.55;margin:0}
 .score-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:12px}
 .metric{padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff}
-.metric .m-label{font-size:8px;color:#7d8781;text-transform:uppercase;letter-spacing:.8px;font-weight:700}
+.metric .m-label{font-size:11px;color:#7d8781;text-transform:uppercase;letter-spacing:.8px;font-weight:700}
 .metric .m-score{font-size:18px;font-weight:750;margin-top:8px;color:var(--green)}
-.metric .m-score span{font-size:9px;color:#89918d;font-weight:600}
+.metric .m-score span{font-size:12px;color:#89918d;font-weight:600}
 .review-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
 .review-card{padding:16px}
 .review-card h3{font-size:13px;margin:0 0 10px}
 .item{padding:10px 0;border-bottom:1px solid var(--line)}
 .item:last-child{border-bottom:0}
-.item strong{display:block;font-size:10px;margin-bottom:3px}
-.item p{margin:0;font-size:9px;color:var(--muted);line-height:1.45}
+.item strong{display:block;font-size:13px;margin-bottom:3px}
+.item p{margin:0;font-size:12px;color:var(--muted);line-height:1.45}
 .actions{display:flex;gap:8px;margin-top:12px}
 
 .bottom-nav{
@@ -111,7 +111,7 @@ button{cursor:pointer}
 }
 .bottom-nav button{border:0;background:transparent;color:#53675f;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 2px}
 .bottom-nav span{width:34px;height:28px;border-radius:9px;display:grid;place-items:center;font-size:15px}
-.bottom-nav small{font-size:8px}
+.bottom-nav small{font-size:11px}
 .bottom-nav button.active{color:var(--green);font-weight:700}
 .bottom-nav button.active span{background:#eef7df}
 
@@ -130,26 +130,157 @@ button{cursor:pointer}
 }
 
 .score-stack{display:grid;gap:8px}
-.score-kicker{font-size:8px;text-transform:uppercase;letter-spacing:1px;font-weight:800;color:rgba(255,255,255,.55);margin-bottom:8px}
+.score-kicker{font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:800;color:rgba(255,255,255,.55);margin-bottom:8px}
 .opportunity-box{border:1px solid #dce5d6;background:#fff;border-radius:14px;padding:16px}
 .opportunity-box .score-kicker{color:#7b8680}
 .opportunity-score{font-size:34px;line-height:1;font-weight:800;letter-spacing:-2px;color:var(--green)}
 .opportunity-score span{font-size:12px;letter-spacing:0;color:#87918b}
 .opportunity-label{font-size:11px;font-weight:800;margin-top:7px;color:var(--green)}
-.opportunity-note{font-size:9px;color:var(--muted);margin-top:3px}
+.opportunity-note{font-size:12px;color:var(--muted);margin-top:3px}
 .opportunity-detail{padding:16px;margin-top:12px}
 .opportunity-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
 .opportunity-head h3{font-size:13px;margin:0}
-.priority-pill{white-space:nowrap;background:#eef7df;color:var(--green);border-radius:999px;padding:7px 9px;font-size:9px;font-weight:800}
+.priority-pill{white-space:nowrap;background:#eef7df;color:var(--green);border-radius:999px;padding:7px 9px;font-size:12px;font-weight:800}
 .opportunity-metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:13px}
 .opportunity-metrics>div{border:1px solid var(--line);border-radius:9px;padding:10px;background:#fbfcfa}
-.opportunity-metrics span{display:block;font-size:8px;color:#7d8781;line-height:1.3}
+.opportunity-metrics span{display:block;font-size:11px;color:#7d8781;line-height:1.3}
 .opportunity-metrics strong{display:block;font-size:13px;color:var(--green);margin-top:6px}
-.opportunity-copy{font-size:9px;color:var(--muted);line-height:1.55;margin:12px 0 0}
+.opportunity-copy{font-size:12px;color:var(--muted);line-height:1.55;margin:12px 0 0}
 @media(max-width:640px){
  .opportunity-metrics{grid-template-columns:repeat(2,1fr)}
  .opportunity-head{align-items:center}
 }
+
+
+.disabled-nav{opacity:.35!important;cursor:not-allowed!important}
+.editing [contenteditable="true"]{outline:1px dashed #9eb4aa;border-radius:7px;padding:5px;background:#fbfdf9}
+.result-modal{position:fixed;inset:0;z-index:200;display:none;align-items:flex-start;justify-content:center;padding:34px 16px;overflow:auto}
+.result-modal.open{display:flex}
+.modal-backdrop{position:fixed;inset:0;background:rgba(8,33,28,.55);backdrop-filter:blur(7px)}
+.customer-report{position:relative;z-index:1;background:#f8faf6;width:min(880px,100%);border-radius:18px;overflow:hidden;box-shadow:0 30px 100px rgba(7,34,28,.25)}
+.customer-report-head{height:68px;padding:0 22px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.report-kicker,.report-label{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#7e8882;font-weight:800}
+.close-modal{width:36px;height:36px;border:1px solid var(--line);border-radius:9px;background:#fff;font-size:22px;color:var(--green)}
+.report-hero{display:grid;grid-template-columns:1fr 180px;gap:24px;padding:28px 28px 18px}
+.report-hero h2{font-size:28px;margin:6px 0 8px;letter-spacing:-1px}
+.report-hero p{font-size:14px;line-height:1.6;color:var(--muted);margin:0;max-width:560px}
+.report-score{background:var(--green);border-radius:15px;color:#fff;padding:20px}
+.report-score strong{font-size:48px;letter-spacing:-3px;color:var(--lime)}
+.report-score span{font-size:15px;color:rgba(255,255,255,.5)}
+.report-score small{display:block;font-size:12px;margin-top:7px}
+.report-metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:0 28px 20px}
+.report-metrics>div{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px}
+.report-metrics span{display:block;font-size:11px;color:var(--muted)}
+.report-metrics strong{display:block;font-size:16px;color:var(--green);margin-top:6px}
+.report-section{margin:0 28px 14px;background:#fff;border:1px solid var(--line);border-radius:13px;padding:18px}
+.report-section h3{font-size:18px;margin:6px 0 8px}
+.report-section p{font-size:13px;line-height:1.6;color:#59665f;margin:0}
+.report-columns{display:grid;grid-template-columns:1fr 1fr}
+.report-columns .report-section{margin-top:0}
+.report-item{padding:10px 0;border-bottom:1px solid var(--line)}
+.report-item:last-child{border-bottom:0}
+.report-item strong{font-size:13px;display:block;margin-bottom:3px}
+.report-item p{font-size:12px;margin:0;color:var(--muted)}
+.report-cta{margin:6px 28px 28px;background:var(--green);border-radius:14px;color:#fff;padding:20px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.report-cta .report-label{color:rgba(255,255,255,.55)}
+.report-cta h3{font-size:19px;margin:5px 0}
+.report-cta p{font-size:12px;color:rgba(255,255,255,.7);margin:0;max-width:520px}
+.toast{position:fixed;right:18px;bottom:90px;background:var(--green);color:#fff;border-radius:10px;padding:11px 14px;font-size:12px;z-index:300;opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s}
+.toast.show{opacity:1;transform:translateY(0)}
+@media(max-width:640px){
+  .report-hero{grid-template-columns:1fr;padding:20px 16px 14px}
+  .report-metrics{grid-template-columns:repeat(2,1fr);padding:0 16px 14px}
+  .report-columns{grid-template-columns:1fr}
+  .report-section{margin:0 16px 12px}
+  .report-cta{margin:4px 16px 20px;flex-direction:column;align-items:flex-start}
+}
+
+
+.internal-grid{grid-template-columns:1fr 1fr}
+.contact-angle{font-size:14px;line-height:1.6;color:var(--text);font-weight:650;background:#f8faf6;border:1px solid var(--line);border-radius:10px;padding:13px}
+.evidence-box{margin-top:10px;padding:13px;border-left:3px solid var(--lime);background:#fbfcfa;border-radius:0 9px 9px 0}
+.evidence-box span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:#7d8781;font-weight:800}
+.evidence-box strong{display:block;font-size:13px;line-height:1.45;margin-top:6px}
+.evidence-box p{font-size:12px!important;margin-top:5px!important;color:var(--muted)!important}
+.mail-card{padding:18px;margin-top:12px}
+.mail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.mail-head h3{font-size:15px;margin:0}
+.internal-pill{background:#eef7df;color:var(--green);font-size:11px;font-weight:800;border-radius:999px;padding:7px 9px}
+.mail-subject{margin-top:14px;padding:11px 13px;border:1px solid var(--line);border-radius:9px;background:#fbfcfa}
+.mail-subject span{display:block;font-size:11px;color:var(--muted);margin-bottom:4px}
+.mail-subject strong{font-size:13px}
+.mail-copy{white-space:pre-wrap;margin-top:9px;border:1px solid var(--line);border-radius:10px;padding:14px;background:#fff;font-size:13px;line-height:1.65;color:#40514a}
+.mail-actions{display:flex;gap:8px;margin-top:10px}
+.internal-actions{padding-bottom:8px}
+@media(max-width:640px){
+ .internal-grid{grid-template-columns:1fr}
+ .mail-head{align-items:center}
+ .mail-actions,.internal-actions{display:grid;grid-template-columns:1fr}
+ .mail-actions .btn,.internal-actions .btn{width:100%}
+}
+
+
+.app-view{display:none}.app-view.active{display:block}
+.top-tabs{display:flex;gap:4px;margin-left:14px}
+.top-tab{border:0;background:transparent;border-radius:8px;padding:8px 10px;font-size:12px;font-weight:700;color:#738078}
+.top-tab.active{background:#eef5e5;color:var(--green)}
+.scan-company-meta{margin-top:7px;display:flex;flex-direction:column;gap:2px}
+.scan-company-meta strong{font-size:13px}.scan-company-meta span{font-size:11px;color:var(--muted)}
+.crm-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:14px}
+.crm-stat{background:#fff;border:1px solid var(--line);border-radius:11px;padding:13px}
+.crm-stat span{display:block;font-size:11px;color:var(--muted);line-height:1.3}
+.crm-stat strong{display:block;font-size:22px;color:var(--green);margin-top:8px}
+.companies-card{overflow:hidden}
+.companies-toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:16px;border-bottom:1px solid var(--line)}
+.companies-toolbar h3{font-size:15px;margin:0}
+.company-filters{display:flex;gap:8px}
+.company-filters input,.company-filters select{height:36px;border:1px solid var(--line);border-radius:8px;background:#fff;padding:0 10px;font-size:12px}
+.company-filters input{width:230px}
+.companies-table{width:100%;border-collapse:collapse}
+.companies-table th,.companies-table td{padding:12px 16px;border-bottom:1px solid #edf0eb;text-align:left;font-size:12px}
+.companies-table th{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:#7d8781;background:#fbfcfa}
+.companies-table tr:hover{background:#fbfcf9}
+.status-pill{display:inline-flex;border-radius:999px;background:#eef5e5;color:var(--green);padding:6px 8px;font-size:10px;font-weight:700}
+.row-btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 9px;font-size:11px;color:var(--green)}
+.companies-empty{text-align:center;padding:48px 18px;color:var(--muted)}
+.companies-empty h3{color:var(--text);margin:0 0 6px}
+.lead-drawer{position:fixed;inset:0;z-index:250;display:none}
+.lead-drawer.open{display:block}
+.drawer-backdrop{position:absolute;inset:0;background:rgba(8,34,28,.45);backdrop-filter:blur(4px)}
+.drawer-panel{position:absolute;right:0;top:0;bottom:0;width:min(460px,92vw);background:#fff;padding:20px;overflow:auto;box-shadow:-20px 0 60px rgba(8,34,28,.15)}
+.drawer-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;border-bottom:1px solid var(--line);padding-bottom:14px}
+.drawer-head h2{font-size:20px;margin:0}.drawer-head p{font-size:12px;color:var(--muted);margin:4px 0 0}
+.drawer-close{border:1px solid var(--line);background:#fff;border-radius:8px;width:34px;height:34px;font-size:20px;color:var(--green)}
+.drawer-scores{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0}
+.drawer-scores>div{border:1px solid var(--line);border-radius:10px;padding:12px}
+.drawer-scores span{display:block;font-size:11px;color:var(--muted)}
+.drawer-scores strong{display:block;font-size:22px;margin-top:6px;color:var(--green)}
+.drawer-label{display:block;font-size:11px;font-weight:800;color:#64716b;margin:14px 0 6px}
+.drawer-select,.drawer-notes{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px;font-size:12px;background:#fff;color:var(--text)}
+.drawer-notes{min-height:90px;resize:vertical}
+.drawer-copy,.drawer-mail{border:1px solid var(--line);border-radius:10px;padding:12px;background:#fbfcfa;font-size:12px;line-height:1.55}
+.drawer-mail strong{display:block;margin-bottom:8px}
+.drawer-mail div{white-space:pre-wrap}
+.drawer-actions{display:flex;gap:8px;margin-top:16px}
+.drawer-actions .btn{flex:1}
+@media(max-width:800px){
+ .top-tabs{margin-left:6px}.top-tab{padding:7px 8px;font-size:11px}
+ .crm-stats{grid-template-columns:repeat(2,1fr)}
+ .companies-toolbar{align-items:flex-start;flex-direction:column}
+ .company-filters{width:100%}.company-filters input{flex:1;width:auto}
+ .companies-table-wrap{overflow:auto}.companies-table{min-width:720px}
+ .mail-actions{display:grid;grid-template-columns:1fr}
+}
+
+
+.engine-badge{display:inline-flex;margin-bottom:10px;padding:6px 8px;border-radius:999px;background:#eef7df;color:var(--green);font-size:11px;font-weight:800}
+.proof-details{margin-top:10px;border:1px solid var(--line);border-radius:9px;background:#fff;overflow:hidden}
+.proof-details summary{cursor:pointer;padding:10px 12px;font-size:12px;font-weight:750;color:var(--green)}
+.proof-list{padding:0 12px 10px}
+.proof-row{padding:9px 0;border-top:1px solid var(--line)}
+.proof-row strong{display:block;font-size:12px;margin-bottom:3px}
+.proof-row span{font-size:11px;color:var(--muted);line-height:1.45}
+.scan-error{background:#fff2ef!important;color:#8b352c!important}
 
 </style>
 </head>
@@ -160,12 +291,12 @@ button{cursor:pointer}
       
       <div class="brand">SOLVEIRE</div>
       <div class="divider"></div>
-      <div class="sub">SCAN</div>
+      <div class="sub">SCAN</div><div class="top-tabs"><button class="top-tab active" id="tabScan">Scannen</button><button class="top-tab" id="tabCompanies">Bedrijven</button></div>
     </div>
 
   </header>
 
-  <main class="main">
+  <main class="main"><section id="scanView" class="app-view active">
     <div class="header">
       <div>
         <h1>Website scannen</h1>
@@ -176,7 +307,7 @@ button{cursor:pointer}
     <div class="grid">
       <section>
         <div class="card scan-card">
-          <div class="eyebrow">Automatische scan</div>
+          <div class="eyebrow">Automatische scan</div><div class="engine-badge" id="engineBadge">Echte website-analyse</div>
           <h2>Start een nieuwe analyse</h2>
           <p>Plak de URL hieronder. Solveire bouwt daarna automatisch de volledige websitebeoordeling op.</p>
 
@@ -203,42 +334,79 @@ button{cursor:pointer}
             <div class="score-stack">
               <div class="score-box">
                 <div class="score-kicker">Website score</div>
-                <div class="score-num">57<span>/100</span></div>
-                <div class="score-label">Ruimte voor groei</div>
+                <div class="score-num"><span id="websiteScoreValue">57</span><span>/100</span></div>
+                <div class="score-label">Websiteverbetering mogelijk</div>
               </div>
               <div class="opportunity-box">
                 <div class="score-kicker">Solveire Opportunity</div>
-                <div class="opportunity-score">86<span>/100</span></div>
-                <div class="opportunity-label">Prioriteit</div>
-                <div class="opportunity-note">Sterke Maatwerk-match</div>
+                <div class="opportunity-score"><span id="opportunityScoreValue">86</span><span>/100</span></div>
+                <div class="opportunity-label" id="opportunityLabel">Prioriteit</div>
+                <div class="opportunity-note" id="opportunityNote">Sterke Maatwerk-match</div>
               </div>
             </div>
             <div class="card summary-card">
-              <h3>Grootste kans</h3>
-              <p>Het bedrijf laat sterk werk zien, maar belangrijke bewijs- en conversie-elementen komen nog te laat in beeld. Hierdoor is de route van eerste indruk naar aanvraag minder sterk dan mogelijk.</p>
+              <h3>Belangrijkste commerciële observatie</h3>
+              <p id="bigOpportunity" contenteditable="false">Het bedrijf laat sterk werk zien, maar belangrijke bewijs- en conversie-elementen komen nog te laat in beeld. Hierdoor is de route van eerste indruk naar aanvraag minder sterk dan mogelijk.</p>
             </div>
           </div>
 
           <div class="score-grid">
-            <div class="metric"><div class="m-label">Eerste indruk</div><div class="m-score">15<span>/20</span></div></div>
-            <div class="metric"><div class="m-label">Mobiel</div><div class="m-score">10<span>/20</span></div></div>
-            <div class="metric"><div class="m-label">Vertrouwen</div><div class="m-score">11<span>/20</span></div></div>
-            <div class="metric"><div class="m-label">Conversie</div><div class="m-score">9<span>/20</span></div></div>
-            <div class="metric"><div class="m-label">Vindbaarheid</div><div class="m-score">12<span>/20</span></div></div>
+            <div class="metric"><div class="m-label">Eerste indruk</div><div class="m-score"><b id="scoreFirst">—</b><span>/20</span></div></div>
+            <div class="metric"><div class="m-label">Mobiel</div><div class="m-score"><b id="scoreMobile">—</b><span>/20</span></div></div>
+            <div class="metric"><div class="m-label">Vertrouwen</div><div class="m-score"><b id="scoreTrust">—</b><span>/20</span></div></div>
+            <div class="metric"><div class="m-label">Conversie</div><div class="m-score"><b id="scoreConversion">—</b><span>/20</span></div></div>
+            <div class="metric"><div class="m-label">Vindbaarheid</div><div class="m-score"><b id="scoreSeo">—</b><span>/20</span></div></div>
           </div>
 
-          <div class="review-grid">
+          <div class="review-grid internal-grid">
             <div class="card review-card">
-              <h3>3 verbeterpunten</h3>
-              <div class="item"><strong>1. Projectresultaten eerder tonen</strong><p>Gebruik bewijs eerder in de klantreis.</p></div>
-              <div class="item"><strong>2. Mobiele aanvraagroute verkorten</strong><p>Maak de primaire CTA sneller bereikbaar.</p></div>
-              <div class="item"><strong>3. Werkgebied prominenter maken</strong><p>Maak direct duidelijk voor welke regio het bedrijf werkt.</p></div>
+              <div class="eyebrow">Interne scanbevindingen</div><div class="scan-company-meta"><strong id="scanCompanyName">Nog niet opgeslagen</strong><span id="scanCompanyUrl"></span></div>
+              <h3>Waarom benaderen?</h3>
+              <div class="item"><strong>Website en bedrijf lopen niet gelijk</strong><p>Het bedrijf laat voldoende kwaliteit zien, maar de website brengt die waarde nog niet overtuigend genoeg over.</p></div>
+              <div class="item"><strong>Duidelijke commerciële verbeterkans</strong><p>Met name de mobiele klantreis en de zichtbaarheid van bewijs kunnen sterker.</p></div>
+              <div class="item"><strong>Geen kleine optimalisatie</strong><p>De gevonden kansen zijn groot genoeg om een serieus Maatwerk-traject te rechtvaardigen.</p></div>
             </div>
+
             <div class="card review-card">
-              <h3>Wat al sterk staat</h3>
-              <div class="item"><strong>Eigen projectfotografie</strong><p>Visueel bewijs van echt uitgevoerd werk.</p></div>
-              <div class="item"><strong>Duidelijk dienstenaanbod</strong><p>De kernpropositie is inhoudelijk goed herkenbaar.</p></div>
-              <div class="item"><strong>Goede basis voor SEO</strong><p>Er is voldoende relevante content om op verder te bouwen.</p></div>
+              <div class="eyebrow">Beste contactkans</div>
+              <h3>Gebruik dit als aanleiding</h3>
+              <div class="contact-angle" id="contactAngle" contenteditable="false">Jullie hebben sterk projectwerk, maar op mobiel komt dat bewijs pas relatief laat in beeld. Daardoor laat de website niet direct zien wat jullie in de praktijk al kunnen.</div>
+              <div class="evidence-box" id="evidenceBox">
+                <span>Bewijs uit scan</span>
+                <strong>Projectresultaten worden pas later in de mobiele klantreis zichtbaar.</strong>
+                <p>Later koppelen we hier automatisch de exacte pagina en screenshot aan.</p>
+              </div>
+              <details class="proof-details">
+                <summary>Bekijk scanbewijs</summary>
+                <div id="proofList" class="proof-list"></div>
+              </details>
+            </div>
+          </div>
+
+          <div class="card mail-card">
+            <div class="mail-head">
+              <div>
+                <div class="eyebrow">Persoonlijke eerste mail</div>
+                <h3>Mailvoorstel op basis van de scan</h3>
+              </div>
+              <span class="internal-pill">Alleen intern</span>
+            </div>
+            <div class="mail-subject"><span>Onderwerp</span><strong id="mailSubject" contenteditable="false">Kleine observatie over jullie website</strong></div>
+            <div class="mail-copy" id="mailCopy" contenteditable="false">Goedemiddag,
+
+Ik kwam jullie website tegen en iets viel me op. Jullie hebben sterk projectwerk, maar op mobiel komt dat bewijs pas vrij laat in beeld. Daardoor laat de website niet direct zien wat jullie in de praktijk al kunnen.
+
+Ik heb nog een paar concrete punten gezien waarmee de website volgens mij sterker kan aansluiten op de kwaliteit van jullie werk.
+
+Als je wilt, stuur ik ze graag even door.
+
+Groet,
+Prescilla
+Solveire</div>
+            <div class="mail-actions">
+              <button class="btn btn-secondary" id="generateMail">Genereer andere versie</button>
+              <button class="btn btn-secondary" id="editMail">Bewerken</button>
+              <button class="btn btn-primary" id="copyMail">Kopieer mail</button>
             </div>
           </div>
 
@@ -251,18 +419,18 @@ button{cursor:pointer}
               <span class="priority-pill">🔥 Prioriteit</span>
             </div>
             <div class="opportunity-metrics">
-              <div><span>Verbeterpotentie</span><strong>27/30</strong></div>
-              <div><span>Bedrijfskwaliteit</span><strong>21/25</strong></div>
-              <div><span>Tractie</span><strong>17/20</strong></div>
-              <div><span>Maatwerkpotentie</span><strong>13/15</strong></div>
-              <div><span>Bereikbaarheid</span><strong>8/10</strong></div>
+              <div><span>Verbeterpotentie</span><strong id="oppImprove">27/30</strong></div>
+              <div><span>Bedrijfskwaliteit</span><strong id="oppBusiness">21/25</strong></div>
+              <div><span>Tractie</span><strong id="oppTraction">17/20</strong></div>
+              <div><span>Maatwerkpotentie</span><strong id="oppCustom">13/15</strong></div>
+              <div><span>Bereikbaarheid</span><strong id="oppReach">8/10</strong></div>
             </div>
             <p class="opportunity-copy">De website laat duidelijke commerciële verbeterkansen zien, terwijl het bedrijf voldoende bewijs van activiteit en kwaliteit heeft. Daardoor is dit waarschijnlijk interessanter dan een bedrijf met alleen een slechte website.</p>
           </div>
 
-          <div class="actions">
-            <button class="btn btn-secondary">Bewerken</button>
-            <button class="btn btn-primary">Goedkeuren en klantresultaat genereren</button>
+          <div class="actions internal-actions">
+            <button class="btn btn-secondary" id="editResult">Scanbevindingen bewerken</button>
+            <button class="btn btn-primary" id="markContacted">Opslaan bij bedrijven</button>
           </div>
         </div>
       </section>
@@ -270,7 +438,7 @@ button{cursor:pointer}
       <aside class="card sidebar">
         <div class="eyebrow">Scanstatus</div>
         <h3>Automatische analyse</h3>
-        <div class="side-note">V9 toont nu de volledige workflow. De echte website-analyse koppelen we hierna via een backend.</div>
+        <div class="side-note">De scan haalt de website daadwerkelijk op en baseert conclusies op gevonden bewijs.</div>
         <span class="badge">Interne versie</span>
         <div class="side-list">
           <div class="side-row"><span>Analysemodus</span><strong>Automatisch</strong></div>
@@ -280,15 +448,109 @@ button{cursor:pointer}
         </div>
       </aside>
     </div>
-  </main>
+  
+  </section>
 
-  <nav class="bottom-nav">
-    <button><span>⌂</span><small>Overzicht</small></button>
-    <button class="active"><span>▣</span><small>Scans</small></button>
-    <button><span>▦</span><small>Bedrijven</small></button>
-    <button><span>✉</span><small>Berichten</small></button>
-    <button><span>⚙</span><small>Instellingen</small></button>
-  </nav>
+  <section id="companiesView" class="app-view">
+    <div class="header">
+      <div>
+        <h1>Bedrijven</h1>
+        <p>Alle gescande en benaderde bedrijven op één plek.</p>
+      </div>
+      <button class="btn btn-primary" id="newScanFromCompanies">Nieuwe scan</button>
+    </div>
+
+    <div class="crm-stats">
+      <div class="crm-stat"><span>Nieuw</span><strong id="crmNew">0</strong></div>
+      <div class="crm-stat"><span>Klaar om te benaderen</span><strong id="crmReady">0</strong></div>
+      <div class="crm-stat"><span>Benaderd</span><strong id="crmContacted">0</strong></div>
+      <div class="crm-stat"><span>Reactie</span><strong id="crmReply">0</strong></div>
+      <div class="crm-stat"><span>Interesse</span><strong id="crmInterest">0</strong></div>
+      <div class="crm-stat"><span>Klant</span><strong id="crmClient">0</strong></div>
+    </div>
+
+    <div class="card companies-card">
+      <div class="companies-toolbar">
+        <div>
+          <div class="eyebrow">Pipeline</div>
+          <h3>Acquisitieoverzicht</h3>
+        </div>
+        <div class="company-filters">
+          <input id="companySearch" type="search" placeholder="Zoek bedrijf...">
+          <select id="companyStatusFilter">
+            <option value="">Alle statussen</option>
+            <option>Nieuw</option>
+            <option>Klaar om te benaderen</option>
+            <option>Benaderd</option>
+            <option>Reactie</option>
+            <option>Interesse</option>
+            <option>Offerte</option>
+            <option>Klant</option>
+            <option>Geen interesse</option>
+          </select>
+        </div>
+      </div>
+      <div class="companies-table-wrap">
+        <table class="companies-table">
+          <thead><tr><th>Bedrijf</th><th>Website</th><th>Opportunity</th><th>Status</th><th>Laatste actie</th><th></th></tr></thead>
+          <tbody id="companiesRows"></tbody>
+        </table>
+      </div>
+      <div class="companies-empty" id="companiesEmpty">
+        <h3>Nog geen bedrijven</h3>
+        <p>Zodra je een scan opslaat, verschijnt het bedrijf hier.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="lead-drawer" id="leadDrawer" aria-hidden="true">
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+    <aside class="drawer-panel">
+      <div class="drawer-head">
+        <div>
+          <div class="eyebrow">Bedrijf</div>
+          <h2 id="drawerCompany">Bedrijf</h2>
+          <p id="drawerWebsite"></p>
+        </div>
+        <button id="closeDrawer" class="drawer-close">×</button>
+      </div>
+
+      <div class="drawer-scores">
+        <div><span>Website</span><strong id="drawerWebsiteScore">—</strong></div>
+        <div><span>Opportunity</span><strong id="drawerOpportunity">—</strong></div>
+      </div>
+
+      <label class="drawer-label">Status</label>
+      <select id="drawerStatus" class="drawer-select">
+        <option>Nieuw</option>
+        <option>Klaar om te benaderen</option>
+        <option>Benaderd</option>
+        <option>Reactie</option>
+        <option>Interesse</option>
+        <option>Offerte</option>
+        <option>Klant</option>
+        <option>Geen interesse</option>
+      </select>
+
+      <label class="drawer-label">Beste contactkans</label>
+      <div class="drawer-copy" id="drawerContactAngle"></div>
+
+      <label class="drawer-label">Mail</label>
+      <div class="drawer-mail">
+        <strong id="drawerMailSubject"></strong>
+        <div id="drawerMailBody"></div>
+      </div>
+
+      <label class="drawer-label">Notities</label>
+      <textarea id="drawerNotes" class="drawer-notes" placeholder="Interne notities..."></textarea>
+
+      <div class="drawer-actions">
+        <button class="btn btn-secondary" id="drawerCopyMail">Kopieer mail</button>
+        <button class="btn btn-primary" id="drawerSave">Opslaan</button>
+      </div>
+    </aside>
+  </div>
+</main>
 </div>
 
 <script>
@@ -312,45 +574,305 @@ function reset(){
   start.textContent='Start automatische scan';
   start.disabled=false;
 }
-function runDemoScan(){
+async function runRealScan(){
   if(busy) return;
-  const url=input.value.trim();
+  let url=input.value.trim();
   if(!url){input.focus();return;}
+  if(!/^https?:\/\//i.test(url)) url='https://'+url;
+  input.value=url;
+
   busy=true;
   result.classList.remove('active');
   wrap.classList.add('active');
   start.disabled=true;
-  start.textContent='Scannen...';
-  let i=0;
-  function next(){
-    if(i>0){
-      const prev=steps[i-1];
-      prev.classList.remove('running');
-      prev.classList.add('done');
-      prev.querySelector('.status').textContent='Klaar';
+  start.textContent='Website analyseren...';
+  document.getElementById('engineBadge').textContent='Analyse gestart';
+  document.getElementById('engineBadge').classList.remove('scan-error');
+
+  const stepNames=['Website ophalen','Belangrijkste pagina’s analyseren','Structuur controleren','Conversie en vertrouwen analyseren','SEO-signalen controleren','Resultaat opbouwen'];
+  let progressIndex=0;
+  let timer=setInterval(()=>{
+    if(progressIndex < steps.length-1){
+      if(progressIndex>0){
+        const prev=steps[progressIndex-1];
+        prev.classList.remove('running'); prev.classList.add('done');
+        prev.querySelector('.status').textContent='Klaar';
+      }
+      const cur=steps[progressIndex];
+      cur.classList.add('running');
+      cur.querySelector('.status').textContent='Bezig';
+      bar.style.width=Math.min(88,((progressIndex+1)/steps.length)*88)+'%';
+      progressIndex++;
     }
-    if(i<steps.length){
-      const current=steps[i];
-      current.classList.add('running');
-      current.querySelector('.status').textContent='Bezig';
-      bar.style.width=((i)/steps.length*100)+'%';
-      i++;
-      setTimeout(next,650);
-    }else{
-      bar.style.width='100%';
-      setTimeout(()=>{
-        busy=false;
-        start.disabled=false;
-        start.textContent='Opnieuw scannen';
-        result.classList.add('active');
-        result.scrollIntoView({behavior:'smooth',block:'start'});
-      },350);
-    }
+  },700);
+
+  try{
+    const resp=await fetch('/api/scan',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({url})
+    });
+    const data=await resp.json().catch(()=>({}));
+    if(!resp.ok) throw new Error(data.error||'De website kon niet worden geanalyseerd.');
+
+    clearInterval(timer);
+    steps.forEach(s=>{
+      s.classList.remove('running'); s.classList.add('done');
+      s.querySelector('.status').textContent='Klaar';
+    });
+    bar.style.width='100%';
+
+    applyRealScanResult(data);
+    document.getElementById('engineBadge').textContent=data.ai_used?'Echte analyse + AI':'Echte analyse';
+    result.classList.add('active');
+    start.disabled=false;
+    start.textContent='Opnieuw scannen';
+    busy=false;
+    setTimeout(()=>result.scrollIntoView({behavior:'smooth',block:'start'}),150);
+  }catch(err){
+    clearInterval(timer);
+    steps.forEach(s=>s.classList.remove('running'));
+    document.getElementById('engineBadge').textContent='Scan mislukt';
+    document.getElementById('engineBadge').classList.add('scan-error');
+    start.disabled=false;
+    start.textContent='Opnieuw proberen';
+    busy=false;
+    alert(err.message||'Er ging iets mis tijdens de scan.');
   }
-  next();
 }
-start.addEventListener('click',runDemoScan);
-input.addEventListener('keydown',e=>{if(e.key==='Enter')runDemoScan()});
+
+function applyRealScanResult(data){
+  window.currentRealScan=data;
+
+  const s=data.scores||{};
+  const set=id=>document.getElementById(id);
+  set('websiteScoreValue').textContent=s.website_total ?? 0;
+  set('opportunityScoreValue').textContent=data.opportunity?.total ?? 0;
+  set('scoreFirst').textContent=s.first_impression ?? '—';
+  set('scoreMobile').textContent=s.mobile ?? '—';
+  set('scoreTrust').textContent=s.trust ?? '—';
+  set('scoreConversion').textContent=s.conversion ?? '—';
+  set('scoreSeo').textContent=s.seo ?? '—';
+
+  const opp=data.opportunity||{};
+  set('opportunityLabel').textContent=opp.label||'Nog beoordelen';
+  set('opportunityNote').textContent=opp.match||'';
+  set('oppImprove').textContent=(opp.breakdown?.improvement ?? 0)+'/30';
+  set('oppBusiness').textContent=(opp.breakdown?.business ?? 0)+'/25';
+  set('oppTraction').textContent=(opp.breakdown?.traction ?? 0)+'/20';
+  set('oppCustom').textContent=(opp.breakdown?.custom ?? 0)+'/15';
+  set('oppReach').textContent=(opp.breakdown?.reachability ?? 0)+'/10';
+
+  set('scanCompanyName').textContent=data.company_name||data.hostname||'Website';
+  set('scanCompanyUrl').textContent=data.hostname||'';
+  set('bigOpportunity').textContent=data.analysis?.commercial_observation||'Geen duidelijke commerciële observatie vastgesteld.';
+  set('contactAngle').textContent=data.analysis?.contact_angle||data.analysis?.commercial_observation||'';
+
+  const evidenceStrong=document.querySelector('#evidenceBox strong');
+  if(evidenceStrong) evidenceStrong.textContent=data.analysis?.best_evidence||'Geen hard bewijs geselecteerd.';
+  const evidenceP=document.querySelector('#evidenceBox p');
+  if(evidenceP) evidenceP.textContent=data.analysis?.evidence_note||'Deze conclusie is gebaseerd op de gevonden website-elementen.';
+
+  const whyItems=[...document.querySelectorAll('.internal-grid .review-card:first-child .item')];
+  (data.analysis?.why_contact||[]).slice(0,3).forEach((x,i)=>{
+    if(!whyItems[i]) return;
+    whyItems[i].querySelector('strong').textContent=x.title||x;
+    whyItems[i].querySelector('p').textContent=x.detail||'';
+  });
+
+  const proof=document.getElementById('proofList');
+  if(proof){
+    proof.innerHTML=(data.evidence||[]).map(e=>`<div class="proof-row"><strong>${escapeHtml(e.label||'Bewijs')}</strong><span>${escapeHtml(e.value||'')}</span></div>`).join('');
+  }
+
+  set('mailSubject').innerText=data.mail?.subject||'Kleine observatie over jullie website';
+  set('mailCopy').innerText=data.mail?.body||'';
+  mailVariantIndex=0;
+  markContactedBtn.disabled=false;
+  markContactedBtn.textContent='Opslaan bij bedrijven';
+}
+
+function escapeHtml(str){
+  return String(str??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+}
+
+start.addEventListener('click',runRealScan);
+input.addEventListener('keydown',e=>{if(e.key==='Enter')runRealScan()});
+
+
+
+
+
+const editResultBtn=document.getElementById('editResult');
+const editMailBtn=document.getElementById('editMail');
+const copyMailBtn=document.getElementById('copyMail');
+const markContactedBtn=document.getElementById('markContacted');
+let resultEdit=false;
+let mailEdit=false;
+
+function toggleContent(ids,on){
+  ids.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.setAttribute('contenteditable',on?'true':'false');
+  });
+}
+
+editResultBtn?.addEventListener('click',()=>{
+  resultEdit=!resultEdit;
+  toggleContent(['bigOpportunity','contactAngle'],resultEdit);
+  editResultBtn.textContent=resultEdit?'Wijzigingen opslaan':'Scanbevindingen bewerken';
+  document.getElementById('result')?.classList.toggle('editing',resultEdit);
+});
+
+editMailBtn?.addEventListener('click',()=>{
+  mailEdit=!mailEdit;
+  toggleContent(['mailSubject','mailCopy'],mailEdit);
+  editMailBtn.textContent=mailEdit?'Wijzigingen opslaan':'Bewerken';
+  document.querySelector('.mail-card')?.classList.toggle('editing',mailEdit);
+});
+
+copyMailBtn?.addEventListener('click',async()=>{
+  const subject=document.getElementById('mailSubject')?.innerText.trim()||'';
+  const body=document.getElementById('mailCopy')?.innerText.trim()||'';
+  const text=`Onderwerp: ${subject}\n\n${body}`;
+  try{
+    await navigator.clipboard.writeText(text);
+    const old=copyMailBtn.textContent;
+    copyMailBtn.textContent='Gekopieerd ✓';
+    setTimeout(()=>copyMailBtn.textContent=old,1500);
+  }catch(e){
+    window.prompt('Kopieer de mail:',text);
+  }
+});
+
+// --- Solveire internal CRM ---
+const STORAGE_KEY='solveire_internal_leads_v13';
+let activeLeadId=null;
+const getLeads=()=>{try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')}catch(e){return[]}};
+const saveLeads=(arr)=>localStorage.setItem(STORAGE_KEY,JSON.stringify(arr));
+const safeHost=(url)=>{try{return new URL(url.startsWith('http')?url:'https://'+url).hostname.replace(/^www\./,'')}catch(e){return url.replace(/^https?:\/\//,'').split('/')[0]}};
+const titleCaseHost=(host)=>host.split('.')[0].replace(/[-_]/g,' ').replace(/\b\w/g,m=>m.toUpperCase());
+let mailVariantIndex=0;
+
+function currentLeadFromScreen(){
+  const url=document.getElementById('urlInput')?.value.trim()||'';
+  const host=safeHost(url);
+  const real=window.currentRealScan||{};
+  return {
+    id:Date.now(),
+    company:real.company_name||titleCaseHost(host),
+    website:url,
+    websiteScore:Number(document.getElementById('websiteScoreValue')?.textContent||0),
+    opportunity:Number(document.getElementById('opportunityScoreValue')?.textContent||0),
+    categoryScores:real.scores||{},
+    contactAngle:document.getElementById('contactAngle')?.innerText.trim()||'',
+    evidence:real.evidence||[],
+    bestEvidence:document.querySelector('#evidenceBox strong')?.innerText.trim()||'',
+    mailSubject:document.getElementById('mailSubject')?.innerText.trim()||'',
+    mailBody:document.getElementById('mailCopy')?.innerText.trim()||'',
+    status:'Klaar om te benaderen',
+    notes:'',
+    updatedAt:new Date().toLocaleString('nl-NL')
+  };
+}
+
+markContactedBtn?.addEventListener('click',()=>{
+  const lead=currentLeadFromScreen();
+  if(!lead.website){alert('Voer eerst een website in en start de scan.');return}
+  const leads=getLeads();
+  const existing=leads.findIndex(x=>x.website===lead.website);
+  if(existing>=0){lead.id=leads[existing].id;leads[existing]={...leads[existing],...lead}}
+  else leads.unshift(lead);
+  saveLeads(leads);
+  markContactedBtn.textContent='Opgeslagen bij bedrijven ✓';
+  markContactedBtn.disabled=true;
+  renderCompanies();
+});
+
+function renderCompanies(){
+  const leads=getLeads();
+  const q=(document.getElementById('companySearch')?.value||'').toLowerCase();
+  const f=document.getElementById('companyStatusFilter')?.value||'';
+  const filtered=leads.filter(l=>(!q||`${l.company} ${l.website}`.toLowerCase().includes(q))&&(!f||l.status===f));
+
+  const rows=document.getElementById('companiesRows');
+  const empty=document.getElementById('companiesEmpty');
+  if(rows) rows.innerHTML=filtered.map(l=>`
+    <tr>
+      <td><strong>${l.company}</strong></td>
+      <td>${safeHost(l.website)}</td>
+      <td><strong>${l.opportunity}/100</strong></td>
+      <td><span class="status-pill">${l.status}</span></td>
+      <td>${l.updatedAt||''}</td>
+      <td><button class="row-btn" data-lead="${l.id}">Open</button></td>
+    </tr>`).join('');
+  if(empty) empty.style.display=leads.length?'none':'block';
+
+  const count=s=>leads.filter(l=>l.status===s).length;
+  const set=(id,n)=>{const el=document.getElementById(id);if(el)el.textContent=n};
+  set('crmNew',count('Nieuw'));
+  set('crmReady',count('Klaar om te benaderen'));
+  set('crmContacted',count('Benaderd'));
+  set('crmReply',count('Reactie'));
+  set('crmInterest',count('Interesse'));
+  set('crmClient',count('Klant'));
+
+  document.querySelectorAll('[data-lead]').forEach(b=>b.addEventListener('click',()=>openLead(Number(b.dataset.lead))));
+}
+
+function switchView(name){
+  document.getElementById('scanView').classList.toggle('active',name==='scan');
+  document.getElementById('companiesView').classList.toggle('active',name==='companies');
+  document.getElementById('tabScan').classList.toggle('active',name==='scan');
+  document.getElementById('tabCompanies').classList.toggle('active',name==='companies');
+  if(name==='companies') renderCompanies();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.getElementById('tabScan')?.addEventListener('click',()=>switchView('scan'));
+document.getElementById('tabCompanies')?.addEventListener('click',()=>switchView('companies'));
+document.getElementById('newScanFromCompanies')?.addEventListener('click',()=>switchView('scan'));
+document.getElementById('companySearch')?.addEventListener('input',renderCompanies);
+document.getElementById('companyStatusFilter')?.addEventListener('change',renderCompanies);
+
+function openLead(id){
+  const lead=getLeads().find(l=>l.id===id); if(!lead) return;
+  activeLeadId=id;
+  document.getElementById('drawerCompany').textContent=lead.company;
+  document.getElementById('drawerWebsite').textContent=safeHost(lead.website);
+  document.getElementById('drawerWebsiteScore').textContent=lead.websiteScore+'/100';
+  document.getElementById('drawerOpportunity').textContent=lead.opportunity+'/100';
+  document.getElementById('drawerStatus').value=lead.status;
+  document.getElementById('drawerContactAngle').textContent=lead.contactAngle;
+  document.getElementById('drawerMailSubject').textContent=lead.mailSubject;
+  document.getElementById('drawerMailBody').textContent=lead.mailBody;
+  document.getElementById('drawerNotes').value=lead.notes||'';
+  document.getElementById('leadDrawer').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeLead(){
+  document.getElementById('leadDrawer').classList.remove('open');
+  document.body.style.overflow='';
+  activeLeadId=null;
+}
+document.getElementById('closeDrawer')?.addEventListener('click',closeLead);
+document.getElementById('drawerBackdrop')?.addEventListener('click',closeLead);
+document.getElementById('drawerSave')?.addEventListener('click',()=>{
+  const leads=getLeads();
+  const i=leads.findIndex(l=>l.id===activeLeadId); if(i<0) return;
+  leads[i].status=document.getElementById('drawerStatus').value;
+  leads[i].notes=document.getElementById('drawerNotes').value;
+  leads[i].updatedAt=new Date().toLocaleString('nl-NL');
+  saveLeads(leads); renderCompanies(); closeLead();
+});
+document.getElementById('drawerCopyMail')?.addEventListener('click',async()=>{
+  const subject=document.getElementById('drawerMailSubject').textContent;
+  const body=document.getElementById('drawerMailBody').textContent;
+  const text=`Onderwerp: ${subject}\n\n${body}`;
+  try{await navigator.clipboard.writeText(text);document.getElementById('drawerCopyMail').textContent='Gekopieerd ✓'}catch(e){window.prompt('Kopieer de mail:',text)}
+});
+
+renderCompanies();
+
 </script>
 </body>
 </html>
