@@ -1,47 +1,69 @@
-# Solveire Scan V13 — echte scan
+# Solveire Scan V14 — echte crawl + visuele analyse
 
-Deze versie gebruikt Cloudflare Pages Functions.
+V14 bouwt voort op V13.
 
-## Structuur
-- `index.html` — interne Solveire Scan + Bedrijven CRM
-- `functions/api/scan.js` — backend die websites echt ophaalt en analyseert
+## Wat V14 nu echt doet
 
-## Deploy
-Upload beide naar dezelfde GitHub repository. De map `functions` moet in de root van de repository staan, naast `index.html`.
+1. Crawlt maximaal 5 relevante pagina's.
+2. Analyseert HTML, headings, CTA's, formulieren, projecten/cases, reviewsignalen, contactroute, metadata en schema.
+3. Kan via **Cloudflare Browser Run** de homepage echt renderen op:
+   - desktop 1440×900
+   - mobiel 390×844
+4. Stuurt de desktop- en mobiele screenshots, samen met het feitelijke bewijs, naar OpenAI voor multimodale analyse.
+5. Iedere categorie krijgt een confidence-score.
+6. Het interne scherm laat bewijs en betrouwbaarheid zien.
+7. De mail wordt alleen op basis van echte bevindingen opgesteld.
 
-Cloudflare Pages detecteert `/functions/api/scan.js` automatisch als route:
-`POST /api/scan`
+## Nodige Cloudflare secrets
 
-## OpenAI (optioneel maar aanbevolen)
-Zonder API key:
-- echte HTML crawl
-- feitelijke signalen
-- deterministische scores
-- feitelijk mailvoorstel
+In Workers & Pages → jouw `solveire-scan` Pages-project → Settings → Variables and Secrets:
 
-Met OpenAI:
-- dezelfde echte feiten
-- betere interpretatie
-- persoonlijke mail in Prescilla/Solveire tone of voice
-- AI mag geen nieuwe feiten verzinnen
-
-Cloudflare:
-Workers & Pages → solveire-scan → Settings → Variables and Secrets → Add
-
-Naam:
+### OpenAI
 `OPENAI_API_KEY`
-
-Waarde:
 jouw OpenAI API key
 
-Kies **Encrypt / Secret**.
-
 Optioneel:
-`OPENAI_MODEL` = `gpt-5.6-luna`
+`OPENAI_MODEL`
+standaard in code: `gpt-5.6-luna`
 
-Redeploy daarna de Pages-app.
+### Cloudflare Browser Run
+`CF_BROWSER_ACCOUNT_ID`
+jouw Cloudflare Account ID
+
+`CF_BROWSER_API_TOKEN`
+een Cloudflare API Token met permissie **Browser Rendering - Edit**
+
+Deze secrets blijven server-side in de Pages Function.
+
+## Waarom REST Browser Run?
+
+Pages Functions ondersteunen maar een subset van Cloudflare-bindings. Browser Run is rechtstreeks beschikbaar in Workers; V14 gebruikt daarom de officiële Browser Run REST Quick Actions vanuit de Pages Function. Zo hoef je je huidige Pages-architectuur niet eerst te migreren.
+
+De endpoint die V14 gebruikt is:
+`/client/v4/accounts/<accountId>/browser-rendering/snapshot`
 
 ## Belangrijk
-V13 doet nog GEEN visuele screenshotanalyse. De mobiele score gebruikt alleen aantoonbare HTML-signalen (zoals viewport, contactroute en CTA's) en claimt niet dat een knop visueel zichtbaar/onzichtbaar is.
 
-De volgende stap is Cloudflare Browser Rendering / Playwright toevoegen voor echte desktop- en mobiele screenshots.
+Zonder de Browser Run secrets werkt de scan nog steeds zoals V13:
+- echte crawl
+- feitelijke HTML-analyse
+- lagere confidence voor mobiel
+
+Met Browser Run:
+- echte desktop- en mobiele rendering
+- screenshots als multimodale input voor AI
+- hogere confidence voor visuele/mobile bevindingen
+
+## Deploy
+
+Upload alle bestanden uit deze map naar dezelfde GitHub-repository. Cloudflare Pages redeployt automatisch.
+
+Structuur:
+```text
+index.html
+functions/
+  api/
+    scan.js
+README.md
+.gitignore
+```

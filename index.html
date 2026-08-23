@@ -282,6 +282,18 @@ button{cursor:pointer}
 .proof-row span{font-size:11px;color:var(--muted);line-height:1.45}
 .scan-error{background:#fff2ef!important;color:#8b352c!important}
 
+
+.confidence-panel{margin-top:10px;border:1px solid var(--line);border-radius:10px;background:#fff;padding:12px}
+.confidence-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.confidence-head span{font-size:12px;font-weight:750;color:#51615b}
+.confidence-head strong{font-size:14px;color:var(--green)}
+.confidence-list{display:grid;gap:7px;margin-top:9px}
+.confidence-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;font-size:11px}
+.confidence-row span{color:#6e7973}.confidence-row strong{font-size:11px}
+.conf-high{color:#20643f}.conf-medium{color:#8b6c20}.conf-low{color:#9b463d}
+.visual-proof{background:#f8fbf4!important}
+.visual-proof strong:before{content:"VISUEEL · ";font-size:9px;letter-spacing:.7px;color:#63865b}
+
 </style>
 </head>
 <body>
@@ -376,10 +388,17 @@ button{cursor:pointer}
                 <strong>Projectresultaten worden pas later in de mobiele klantreis zichtbaar.</strong>
                 <p>Later koppelen we hier automatisch de exacte pagina en screenshot aan.</p>
               </div>
-              <details class="proof-details">
+              <details class="proof-details" open>
                 <summary>Bekijk scanbewijs</summary>
                 <div id="proofList" class="proof-list"></div>
               </details>
+              <div class="confidence-panel">
+                <div class="confidence-head">
+                  <span>Betrouwbaarheid analyse</span>
+                  <strong id="overallConfidence">—</strong>
+                </div>
+                <div id="confidenceList" class="confidence-list"></div>
+              </div>
             </div>
           </div>
 
@@ -444,7 +463,7 @@ Solveire</div>
           <div class="side-row"><span>Analysemodus</span><strong>Automatisch</strong></div>
           <div class="side-row"><span>Pagina’s</span><strong>5–10</strong></div>
           <div class="side-row"><span>Beoordeling</span><strong>100 punten</strong></div>
-          <div class="side-row"><span>Goedkeuring nodig</span><strong>Ja</strong></div>
+          <div class="side-row"><span>Goedkeuring nodig</span><strong>Ja</strong></div><div class="side-row"><span>Visuele analyse</span><strong id="visualStatus">Controleren…</strong></div>
         </div>
       </aside>
     </div>
@@ -682,8 +701,28 @@ function applyRealScanResult(data){
 
   const proof=document.getElementById('proofList');
   if(proof){
-    proof.innerHTML=(data.evidence||[]).map(e=>`<div class="proof-row"><strong>${escapeHtml(e.label||'Bewijs')}</strong><span>${escapeHtml(e.value||'')}</span></div>`).join('');
+    proof.innerHTML=(data.evidence||[]).map(e=>`<div class="proof-row ${e.source==='visual'?'visual-proof':''}"><strong>${escapeHtml(e.label||'Bewijs')}</strong><span>${escapeHtml(e.value||'')}</span></div>`).join('');
   }
+
+  const confidence=data.confidence||{};
+  const overall=Number(confidence.overall||0);
+  const confLabel=n=>n>=85?'Hoog':n>=65?'Gemiddeld':'Laag';
+  const confClass=n=>n>=85?'conf-high':n>=65?'conf-medium':'conf-low';
+  set('overallConfidence').textContent=overall?`${overall}% · ${confLabel(overall)}`:'Niet vastgesteld';
+  const confList=set('confidenceList');
+  if(confList){
+    const rows=[
+      ['Eerste indruk',confidence.first_impression],
+      ['Mobiel',confidence.mobile],
+      ['Vertrouwen',confidence.trust],
+      ['Conversie',confidence.conversion],
+      ['Vindbaarheid',confidence.seo]
+    ];
+    confList.innerHTML=rows.map(([label,val])=>{
+      const n=Number(val||0); return `<div class="confidence-row"><span>${label}</span><strong class="${confClass(n)}">${n?`${n}% · ${confLabel(n)}`:'—'}</strong></div>`;
+    }).join('');
+  }
+  set('visualStatus').textContent=data.visual?.used?'Desktop + mobiel':'Niet beschikbaar';
 
   set('mailSubject').innerText=data.mail?.subject||'Kleine observatie over jullie website';
   set('mailCopy').innerText=data.mail?.body||'';
@@ -765,6 +804,8 @@ function currentLeadFromScreen(){
     websiteScore:Number(document.getElementById('websiteScoreValue')?.textContent||0),
     opportunity:Number(document.getElementById('opportunityScoreValue')?.textContent||0),
     categoryScores:real.scores||{},
+    confidence:real.confidence||{},
+    visual:real.visual||{},
     contactAngle:document.getElementById('contactAngle')?.innerText.trim()||'',
     evidence:real.evidence||[],
     bestEvidence:document.querySelector('#evidenceBox strong')?.innerText.trim()||'',

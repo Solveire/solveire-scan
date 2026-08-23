@@ -2,6 +2,9 @@ const MAX_PAGES = 5;
 const MAX_HTML = 350000;
 const FETCH_TIMEOUT = 10000;
 
+const BROWSER_TIMEOUT = 30000;
+
+
 const CTA_WORDS = [
   "offerte","contact","afspraak","plan","bel","bel ons","aanvragen","aanvraag",
   "advies","kennismaken","start","boek","reserveer","meer informatie","vrijblijvend"
@@ -26,18 +29,33 @@ export async function onRequestPost(context) {
     if (!crawl.pages.length) return json({ error: "De website kon niet worden opgehaald." }, 422);
 
     const facts = buildFacts(crawl);
-    const deterministic = deterministicAssessment(facts);
+
+    // Visual rendering is optional but strongly preferred.
+    // It uses Browser Run REST so it also works from a Pages Function.
+    let visual = null;
+    if (context.env.CF_BROWSER_ACCOUNT_ID && context.env.CF_BROWSER_API_TOKEN) {
+      try {
+        visual = await collectVisualEvidence(
+          context.env,
+          facts.scanned_pages[0] || target.toString()
+        );
+      } catch (err) {
+        console.log("Visual analysis failed:", err?.message || err);
+      }
+    }
+
+    const deterministic = deterministicAssessment(facts, visual);
 
     let ai = null;
     if (context.env.OPENAI_API_KEY) {
       try {
-        ai = await analyzeWithOpenAI(context.env, facts, deterministic);
+        ai = await analyzeWithOpenAI(context.env, facts, deterministic, visual);
       } catch (err) {
         console.log("AI analysis failed:", err?.message || err);
       }
     }
 
-    const final = mergeAssessment(facts, deterministic, ai);
+    const final = mergeAssessment(facts, deterministic, ai, visual);
     return json(final, 200);
   } catch (err) {
     return json({ error: err?.message || "Onbekende fout tijdens scan." }, 500);
@@ -67,6 +85,86 @@ function isSafePublicTarget(u) {
     if (p[0] === 172 && p[1] >= 16 && p[1] <= 31) return false;
   }
   return true;
+}
+
+
+async function collectVisualEvidence(env, url) {
+  const desktop = await browserSnapshot(env, url, { width: 1440, height: 900, deviceScaleFactor: 1 });
+  const mobile = await browserSnapshot(env, url, { width: 390, height: 844, deviceScaleFactor: 1 });
+
+  const desktopVisual = analyzeRenderedSnapshot(desktop, "desktop");
+  const mobileVisual = analyzeRenderedSnapshot(mobile, "mobile");
+
+  return {
+    used: true,
+    desktop: desktopVisual,
+    mobile: mobileVisual,
+    // Base64 screenshots are held server-side for multimodal AI, not returned to the frontend.
+    _desktopScreenshot: desktop.screenshot || null,
+    _mobileScreenshot: mobile.screenshot || null
+  };
+}
+
+async function browserSnapshot(env, url, viewport) {
+  const endpoint = `https://api.cloudflare.com/client/v4/accounts/${env.CF_BROWSER_ACCOUNT_ID}/browser-rendering/snapshot`;
+  const res = await fetch(endpoint, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${env.CF_BROWSER_API_TOKEN}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      url,
+      formats: ["content", "screenshot", "accessibilityTree"],
+      viewport,
+      screenshotOptions: { fullPage: false, type: "jpeg", quality: 68 },
+      gotoOptions: { waitUntil: "networkidle2", timeout: BROWSER_TIMEOUT }
+    })
+  });
+  const data = await res.json().catch(()=>null);
+  if (!res.ok || !data?.success || !data?.result) {
+    throw new Error(`Browser Run snapshot failed (${res.status})`);
+  }
+  return data.result;
+}
+
+function analyzeRenderedSnapshot(snapshot, mode) {
+  const content = String(snapshot?.content || "");
+  const tree = typeof snapshot?.accessibilityTree === "string"
+    ? snapshot.accessibilityTree
+    : JSON.stringify(snapshot?.accessibilityTree || {});
+  const renderedText = stripTags(content).slice(0, 15000);
+  const combined = (renderedText + " " + tree).toLowerCase();
+
+  const visibleCtas = CTA_WORDS.filter(w => combined.includes(w)).slice(0, 10);
+  const visibleTrust = TRUST_WORDS.filter(w => combined.includes(w)).slice(0, 10);
+  const visibleProjects = PROJECT_WORDS.filter(w => combined.includes(w)).slice(0, 10);
+
+  const renderedH1 = matchAll(content, /<h1\b[^>]*>([\s\S]*?)<\/h1>/gi, 10).map(m=>stripTags(m[1]));
+  const navCount = matchAll(content, /<(nav|header)\b[\s\S]*?<\/(nav|header)>/gi, 8).length;
+  const buttonCount = matchAll(content, /<(button|a)\b[^>]*>([\s\S]*?)<\/(button|a)>/gi, 120)
+    .map(m=>stripTags(m[2])).filter(x=>x.trim()).length;
+
+  return {
+    mode,
+    rendered_h1: renderedH1,
+    visible_cta_terms: visibleCtas,
+    visible_trust_terms: visibleTrust,
+    visible_project_terms: visibleProjects,
+    rendered_text_length: renderedText.length,
+    nav_or_header_blocks: navCount,
+    clickable_text_elements: buttonCount,
+    accessibility_sample: tree.slice(0, 4500)
+  };
+}
+
+function safeVisualForClient(visual) {
+  if (!visual) return { used:false };
+  return {
+    used:true,
+    desktop:visual.desktop,
+    mobile:visual.mobile
+  };
 }
 
 async function fetchHtml(url) {
@@ -286,7 +384,7 @@ function buildFacts(crawl) {
 
 function clamp(n,min,max){ return Math.max(min,Math.min(max,n)); }
 
-function deterministicAssessment(f) {
+function deterministicAssessment(f, visual = null) {
   const h=f.home, a=f.aggregate;
 
   let first = 0;
@@ -297,13 +395,18 @@ function deterministicAssessment(f) {
   first += h.word_count >= 180 ? 3 : h.word_count >= 80 ? 2 : 1;
   first = clamp(first,0,20);
 
-  // HTML-only mobile score is intentionally conservative. No visual claims.
   let mobile = 0;
-  mobile += h.has_viewport ? 8 : 0;
-  mobile += (h.tel_count > 0 || h.mail_count > 0 || h.forms.length > 0) ? 5 : 2;
-  mobile += h.ctas.length > 0 ? 4 : 1;
-  mobile += 2; // neutral baseline; visual layout not assessed
-  mobile = clamp(mobile,0,19);
+  mobile += h.has_viewport ? 6 : 0;
+  mobile += (h.tel_count > 0 || h.mail_count > 0 || h.forms.length > 0) ? 4 : 1;
+  mobile += h.ctas.length > 0 ? 3 : 1;
+  if (visual?.mobile) {
+    mobile += visual.mobile.visible_cta_terms.length ? 4 : 1;
+    mobile += visual.mobile.rendered_text_length > 250 ? 2 : 1;
+    mobile += visual.mobile.nav_or_header_blocks > 0 ? 1 : 0;
+  } else {
+    mobile += 2; // neutral baseline if Browser Run isn't configured
+  }
+  mobile = clamp(mobile,0,20);
 
   let trust = 0;
   trust += a.review_signal ? 6 : 1;
@@ -340,8 +443,8 @@ function deterministicAssessment(f) {
   const reachability = clamp((a.contact_signal?7:2)+(h.mail_count?2:0)+(h.tel_count?1:0),0,10);
   const opportunity = clamp(improvement+business+traction+custom+reachability,0,100);
 
-  const evidence = buildEvidence(f, {first,mobile,trust,conversion,seo});
-  const fallback = fallbackNarrative(f, {first,mobile,trust,conversion,seo,website_total}, opportunity, evidence);
+  const evidence = buildEvidence(f, {first,mobile,trust,conversion,seo}, visual);
+  const fallback = fallbackNarrative(f, {first,mobile,trust,conversion,seo,website_total}, opportunity, evidence, visual);
 
   return {
     scores:{first_impression:first,mobile,trust,conversion,seo,website_total},
@@ -353,11 +456,12 @@ function deterministicAssessment(f) {
     },
     evidence,
     analysis:fallback.analysis,
-    mail:fallback.mail
+    mail:fallback.mail,
+    confidence:deterministicConfidence(f, visual)
   };
 }
 
-function buildEvidence(f, scores) {
+function buildEvidence(f, scores, visual = null) {
   const h=f.home,a=f.aggregate;
   const ev = [
     {label:"Gescande pagina’s", value:`${f.page_count} pagina('s): ${f.scanned_pages.map(x=>new URL(x).pathname||"/").join(", ")}`},
@@ -366,12 +470,26 @@ function buildEvidence(f, scores) {
     {label:"Vertrouwen", value:`Reviews/signaal: ${a.review_signal?"gevonden":"niet gevonden"} · Projecten/cases: ${a.project_signal?"gevonden":"niet gevonden"} · Over/team: ${a.about_signal?"gevonden":"niet gevonden"}`},
     {label:"Contactroute", value:`Formulieren: ${a.form_count} · grootste formulier: ${a.max_form_fields} velden · tel/mail-links aanwezig: ${a.contact_signal?"ja":"nee"}`},
     {label:"SEO-basis", value:`Title: ${h.title?"ja":"nee"} · meta description: ${h.meta_description?"ja":"nee"} · schema: ${a.schema_types.length?a.schema_types.join(", "):"geen aangetroffen"}`},
-    {label:"Mobiel", value:h.has_viewport?"Viewport-tag gevonden. Visuele mobiele layout is in deze versie nog niet met browser-rendering beoordeeld.":"Geen viewport-tag gevonden. Visuele mobiele layout is in deze versie nog niet met browser-rendering beoordeeld."}
+    {label:"Mobiel technisch", value:h.has_viewport?"Viewport-tag gevonden.":"Geen viewport-tag gevonden."}
   ];
+  if (visual?.used) {
+    ev.push({
+      label:"Mobiele render",
+      value:`Gerenderd op 390×844. Zichtbare CTA-termen: ${visual.mobile.visible_cta_terms.length ? visual.mobile.visible_cta_terms.join(", ") : "geen duidelijke termen gedetecteerd"}.`,
+      source:"visual"
+    });
+    ev.push({
+      label:"Desktop render",
+      value:`Gerenderd op 1440×900. Zichtbare CTA-termen: ${visual.desktop.visible_cta_terms.length ? visual.desktop.visible_cta_terms.join(", ") : "geen duidelijke termen gedetecteerd"}.`,
+      source:"visual"
+    });
+  } else {
+    ev.push({label:"Visuele render", value:"Niet uitgevoerd. Configureer Cloudflare Browser Run voor echte desktop- en mobiele rendering."});
+  }
   return ev;
 }
 
-function fallbackNarrative(f, scores, opportunity, evidence) {
+function fallbackNarrative(f, scores, opportunity, evidence, visual = null) {
   const a=f.aggregate,h=f.home;
   const problems=[];
   if (!a.review_signal) problems.push("Op de gescande pagina’s is geen duidelijk review- of klantbewijs aangetroffen.");
@@ -381,6 +499,9 @@ function fallbackNarrative(f, scores, opportunity, evidence) {
   if (!h.meta_description) problems.push("De homepage heeft geen meta description aangetroffen.");
   if (h.h1s.length !== 1) problems.push(`De homepage heeft ${h.h1s.length} H1-koppen aangetroffen.`);
   if (!h.has_viewport) problems.push("Er is geen viewport-tag aangetroffen voor mobiele weergave.");
+  if (visual?.mobile && visual.mobile.visible_cta_terms.length === 0) {
+    problems.push("In de mobiele render is binnen de gerenderde toegankelijkheids- en tekststructuur geen duidelijke CTA-term gedetecteerd.");
+  }
 
   const strengths=[];
   if (a.project_signal) strengths.push("Projecten/cases zijn aantoonbaar aanwezig.");
@@ -415,35 +536,70 @@ function fallbackNarrative(f, scores, opportunity, evidence) {
   };
 }
 
-async function analyzeWithOpenAI(env, facts, deterministic) {
-  const prompt = `Je bent de interne website-analist van Solveire. Analyseer ALLEEN op basis van het aangeleverde bewijs.
-Regels:
-- Verzin nooit feiten, reviews, posities op mobiel, omzetverlies of conversie-impact.
-- Als visuele mobiele layout niet is beoordeeld, zeg dat niet alsof je het wel weet.
-- Scores mogen maximaal 3 punten afwijken van de deterministische categorie-score tenzij het bewijs dit expliciet rechtvaardigt.
-- Schrijf Nederlands, compact en concreet.
-- Mail moet klinken als Prescilla: menselijk, zelfverzekerd, warm, licht tongue-in-cheek waar natuurlijk. Geen gladde salespraat, geen marketingjargon, geen overdreven complimenten. Verkoop niet direct. Geen streepjes als stijlmiddel.
-- Gebruik één concrete, aantoonbare observatie als aanleiding.
-Geef ALLEEN geldig JSON terug met exact:
+async function analyzeWithOpenAI(env, facts, deterministic, visual = null) {
+  const visualFacts = visual ? safeVisualForClient(visual) : {used:false};
+
+  const prompt = `Je bent de interne website-analist van Solveire. Geef eerlijke feedback op basis van ALLEEN aantoonbaar bewijs.
+
+HARD RULES
+- Verzin nooit reviews, posities, omzetverlies, bezoekersgedrag of conversie-impact.
+- Maak onderscheid tussen technisch bewijs, gerenderd visueel bewijs en interpretatie.
+- Als iets niet kan worden vastgesteld, schrijf "niet vastgesteld".
+- Zoek NIET verplicht drie problemen. Een onderdeel mag gewoon goed zijn.
+- Mobiele visuele claims mogen alleen wanneer visual.used=true en de render dit ondersteunt.
+- Scores mogen maximaal 3 punten afwijken van de deterministische categorie-score, tenzij een gerenderd screenshot dit duidelijk rechtvaardigt.
+- Mail gebruikt slechts één sterke observatie, geen lijst met generieke websiteproblemen.
+- Mail is Nederlands, menselijk, warm en zelfverzekerd. Licht tongue-in-cheek als het natuurlijk voelt. Geen gladde salespraat of overdreven complimenten.
+- Geen claims als "u verliest klanten" tenzij bewijs dat letterlijk aantoont, wat praktisch nooit het geval is.
+- De eerste mail verkoopt niet; hij maakt nieuwsgierig.
+
+Geef ALLEEN geldig JSON:
 {
  "company_name": string,
  "scores":{"first_impression":0-20,"mobile":0-20,"trust":0-20,"conversion":0-20,"seo":0-20},
+ "confidence":{"first_impression":0-100,"mobile":0-100,"trust":0-100,"conversion":0-100,"seo":0-100,"overall":0-100},
  "analysis":{
    "commercial_observation":string,
    "contact_angle":string,
    "best_evidence":string,
    "evidence_note":string,
-   "why_contact":[{"title":string,"detail":string},{"title":string,"detail":string},{"title":string,"detail":string}]
+   "why_contact":[
+     {"title":string,"detail":string},
+     {"title":string,"detail":string},
+     {"title":string,"detail":string}
+   ]
  },
+ "visual_findings":[
+   {"label":string,"detail":string,"confidence":0-100}
+ ],
  "mail":{"subject":string,"body":string}
 }
 
-BEWIJS:
+HTML/CRAWL BEWIJS:
 ${JSON.stringify(facts)}
+
+VISUEEL/Gerenderd BEWIJS:
+${JSON.stringify(visualFacts)}
 
 DETERMINISTISCHE SCORES:
 ${JSON.stringify(deterministic.scores)}
 `;
+
+  const content = [{ type:"input_text", text:prompt }];
+
+  // If Browser Run returned screenshots, let the multimodal model inspect them directly.
+  if (visual?._desktopScreenshot) {
+    content.push({
+      type:"input_image",
+      image_url:`data:image/jpeg;base64,${visual._desktopScreenshot}`
+    });
+  }
+  if (visual?._mobileScreenshot) {
+    content.push({
+      type:"input_image",
+      image_url:`data:image/jpeg;base64,${visual._mobileScreenshot}`
+    });
+  }
 
   const response = await fetch("https://api.openai.com/v1/responses", {
     method:"POST",
@@ -453,14 +609,19 @@ ${JSON.stringify(deterministic.scores)}
     },
     body:JSON.stringify({
       model: env.OPENAI_MODEL || "gpt-5.6-luna",
-      input: prompt
+      input:[{
+        role:"user",
+        content
+      }]
     })
   });
-  if (!response.ok) throw new Error(`OpenAI ${response.status}`);
+  if (!response.ok) {
+    const errText = await response.text().catch(()=> "");
+    throw new Error(`OpenAI ${response.status}: ${errText.slice(0,180)}`);
+  }
   const data = await response.json();
   const text = extractOutputText(data);
-  const parsed = parseJsonLoose(text);
-  return parsed;
+  return parseJsonLoose(text);
 }
 
 function extractOutputText(data) {
@@ -482,13 +643,42 @@ function parseJsonLoose(text) {
   throw new Error("AI gaf geen geldig JSON-resultaat.");
 }
 
-function mergeAssessment(facts, det, ai) {
+
+function deterministicConfidence(facts, visual) {
+  const pageFactor = clamp(55 + (facts.page_count * 6), 55, 85);
+  const visualBoost = visual?.used ? 12 : 0;
+  const mobile = visual?.used ? 90 : 58;
+  return {
+    first_impression: clamp(pageFactor + visualBoost, 0, 96),
+    mobile,
+    trust: clamp(pageFactor + (facts.aggregate.review_signal || facts.aggregate.project_signal ? 8 : 0), 0, 94),
+    conversion: clamp(pageFactor + 5, 0, 92),
+    seo: clamp(pageFactor + 8, 0, 95),
+    overall: clamp(Math.round((pageFactor*4 + mobile)/5), 0, 94)
+  };
+}
+
+function normalizeConfidence(aiConf, facts, visual) {
+  const fallback = deterministicConfidence(facts, visual);
+  const out = {...fallback};
+  for (const k of ["first_impression","mobile","trust","conversion","seo","overall"]) {
+    const n = Number(aiConf?.[k]);
+    if (Number.isFinite(n)) out[k]=clamp(Math.round(n), 0, 100);
+  }
+  if (!visual?.used) out.mobile=Math.min(out.mobile,65);
+  out.overall=Math.round((out.first_impression+out.mobile+out.trust+out.conversion+out.seo)/5);
+  return out;
+}
+
+function mergeAssessment(facts, det, ai, visual = null) {
   if (!ai) {
     return {
       hostname:facts.hostname,
       company_name:facts.hostname.split(".")[0].replace(/[-_]/g," ").replace(/\b\w/g,m=>m.toUpperCase()),
       scanned_pages:facts.scanned_pages,
       ...det,
+      confidence:det.confidence || deterministicConfidence(facts, visual),
+      visual:safeVisualForClient(visual),
       ai_used:false
     };
   }
@@ -525,6 +715,9 @@ function mergeAssessment(facts, det, ai) {
       subject:ai.mail?.subject || det.mail.subject,
       body:ai.mail?.body || det.mail.body
     },
+    confidence:normalizeConfidence(ai.confidence, facts, visual),
+    visual:safeVisualForClient(visual),
+    visual_findings:Array.isArray(ai.visual_findings) ? ai.visual_findings.slice(0,5) : [],
     ai_used:true
   };
 }
