@@ -294,7 +294,7 @@ button{cursor:pointer}
 .visual-proof{background:#f8fbf4!important}
 .visual-proof strong:before{content:"VISUEEL · ";font-size:9px;letter-spacing:.7px;color:#63865b}
 
-</style>
+.personalization-card,.mail-style-card{margin-bottom:12px}.personalization-head{display:flex;justify-content:space-between;gap:14px}.personalization-head h3{margin:0;font-size:15px}.personalization-head p{font-size:11px;color:var(--muted);margin:4px 0 0}.personalization-head>strong{color:var(--green);font-size:13px}.personalization-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}.personalization-grid>div{border:1px solid var(--line);border-radius:9px;padding:10px;background:#fbfcfa}.personalization-grid span{display:block;font-size:10px;color:var(--muted);margin-bottom:5px}.personalization-grid strong{font-size:11px;line-height:1.45}.mail-style-tabs{display:flex;gap:6px}.mail-style{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 10px;font-size:11px;font-weight:700}.mail-style.active{background:#eef5e5;color:var(--green);border-color:#dce9cf}@media(max-width:700px){.personalization-grid{grid-template-columns:1fr}.mail-style-tabs{display:grid;grid-template-columns:1fr 1fr 1fr}}</style>
 </head>
 <body>
 <div class="shell">
@@ -402,7 +402,7 @@ button{cursor:pointer}
             </div>
           </div>
 
-          <div class="card mail-card">
+          <div class="card personalization-card"><div class="eyebrow">Personalisatie</div><div class="personalization-head"><div><h3 id="hookQuality">Hook controleren…</h3><p id="hookWarning">Alleen aantoonbare details van deze website worden gebruikt.</p></div><strong id="hookConfidence">—</strong></div><div class="personalization-grid"><div><span>Unieke hook</span><strong id="personalHook">—</strong></div><div><span>Concreet sterk punt</span><strong id="personalStrength">—</strong></div><div><span>Één gemiste kans</span><strong id="personalOpportunity">—</strong></div></div></div><div class="card mail-style-card"><div class="eyebrow">Mailstijl</div><div class="mail-style-tabs"><button class="mail-style active" data-style="personal">Persoonlijk</button><button class="mail-style" data-style="direct">Kort & direct</button><button class="mail-style" data-style="business">Zakelijk</button></div></div><div class="card mail-card">
             <div class="mail-head">
               <div>
                 <div class="eyebrow">Persoonlijke eerste mail</div>
@@ -423,7 +423,7 @@ Groet,
 Prescilla
 Solveire</div>
             <div class="mail-actions">
-              <button class="btn btn-secondary" id="generateMail">Genereer andere versie</button>
+              <button class="btn btn-secondary" id="generateMail">Genereer andere versie</button><button class="btn btn-secondary" id="notMyVoice">Dit klinkt niet als mij</button>
               <button class="btn btn-secondary" id="editMail">Bewerken</button>
               <button class="btn btn-primary" id="copyMail">Kopieer mail</button>
             </div>
@@ -722,7 +722,7 @@ function applyRealScanResult(data){
       const n=Number(val||0); return `<div class="confidence-row"><span>${label}</span><strong class="${confClass(n)}">${n?`${n}% · ${confLabel(n)}`:'—'}</strong></div>`;
     }).join('');
   }
-  set('visualStatus').textContent=data.visual?.used?'Desktop + mobiel':'Niet beschikbaar';
+  set('visualStatus').textContent=data.visual?.used?'Desktop + mobiel':'Niet beschikbaar';const p=data.personalization||{};set('personalHook').textContent=p.hook||'Geen sterke unieke hook gevonden';set('personalStrength').textContent=p.strength||'Niet vastgesteld';set('personalOpportunity').textContent=p.opportunity||'Niet vastgesteld';set('hookConfidence').textContent=(p.confidence||0)+'%';set('hookQuality').textContent=p.usable?'Sterke persoonlijke hook ✓':'Personalisatie te zwak';set('hookWarning').textContent=p.usable?'Deze mail gebruikt aantoonbare details van deze website.':'Mail niet automatisch gebruiken. Controleer of voeg handmatig een persoonlijke aanleiding toe.';
 
   set('mailSubject').innerText=data.mail?.subject||'Kleine observatie over jullie website';
   set('mailCopy').innerText=data.mail?.body||'';
@@ -804,6 +804,7 @@ function currentLeadFromScreen(){
     websiteScore:Number(document.getElementById('websiteScoreValue')?.textContent||0),
     opportunity:Number(document.getElementById('opportunityScoreValue')?.textContent||0),
     categoryScores:real.scores||{},
+    personalization:real.personalization||{},
     confidence:real.confidence||{},
     visual:real.visual||{},
     contactAngle:document.getElementById('contactAngle')?.innerText.trim()||'',
@@ -914,6 +915,6 @@ document.getElementById('drawerCopyMail')?.addEventListener('click',async()=>{
 
 renderCompanies();
 
-</script>
+let currentMailStyle='personal';async function requestMail(style){const data=window.currentRealScan;if(!data?.personalization)return;try{const r=await fetch('/api/mail',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({company_name:data.company_name,hostname:data.hostname,style,personalization:data.personalization})});const m=await r.json();if(!r.ok)throw new Error(m.error||'Mail kon niet worden gemaakt');document.getElementById('mailSubject').innerText=m.subject;document.getElementById('mailCopy').innerText=m.body}catch(e){alert(e.message)}}document.querySelectorAll('.mail-style').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.mail-style').forEach(x=>x.classList.remove('active'));btn.classList.add('active');currentMailStyle=btn.dataset.style;requestMail(currentMailStyle)}));document.getElementById('generateMail')?.addEventListener('click',()=>requestMail(currentMailStyle));document.getElementById('notMyVoice')?.addEventListener('click',()=>{const a=JSON.parse(localStorage.getItem('solveire_mail_feedback')||'[]');a.push({date:new Date().toISOString(),company:window.currentRealScan?.company_name||'',style:currentMailStyle,subject:document.getElementById('mailSubject').innerText,body:document.getElementById('mailCopy').innerText});localStorage.setItem('solveire_mail_feedback',JSON.stringify(a));document.getElementById('notMyVoice').textContent='Feedback opgeslagen ✓'});</script>
 </body>
 </html>

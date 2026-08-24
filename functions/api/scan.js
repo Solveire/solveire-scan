@@ -552,6 +552,11 @@ HARD RULES
 - Mail is Nederlands, menselijk, warm en zelfverzekerd. Licht tongue-in-cheek als het natuurlijk voelt. Geen gladde salespraat of overdreven complimenten.
 - Geen claims als "u verliest klanten" tenzij bewijs dat letterlijk aantoont, wat praktisch nooit het geval is.
 - De eerste mail verkoopt niet; hij maakt nieuwsgierig.
+- Bepaal eerst één unieke hook die aantoonbaar bij DIT bedrijf hoort: concrete dienst, project, propositie, regio, headline of ander specifiek website-detail. Alleen bedrijfsnaam telt niet.
+- Benoem één concreet sterk punt en maximaal één gemiste kans.
+- Vermijd standaard acquisitietaal zoals "online aanwezigheid", "naar een hoger niveau", "optimaliseren", "kansen benutten", "ik kwam toevallig jullie website tegen" en "geen verkooppraatje hoor".
+- Geen geforceerde complimenten. Als de hook onvoldoende uniek is: personalization.usable=false.
+- Tongue-in-cheek alleen als het natuurlijk past.
 
 Geef ALLEEN geldig JSON:
 {
@@ -569,6 +574,7 @@ Geef ALLEEN geldig JSON:
      {"title":string,"detail":string}
    ]
  },
+ "personalization":{"hook":string,"strength":string,"opportunity":string,"confidence":0-100,"usable":boolean},
  "visual_findings":[
    {"label":string,"detail":string,"confidence":0-100}
  ],
@@ -670,7 +676,7 @@ function normalizeConfidence(aiConf, facts, visual) {
   return out;
 }
 
-function mergeAssessment(facts, det, ai, visual = null) {
+function fallbackPersonalization(facts,det){const h=facts.home||{},a=facts.aggregate||{};const hook=h.h1s?.[0]||h.ctas?.[0]||"";const strength=a.project_signal?"Projecten of cases zijn aantoonbaar aanwezig.":a.review_signal?"Klantbewijs is aantoonbaar aanwezig.":h.ctas?.length?`Er is een duidelijke actie aanwezig: ${h.ctas[0]}.`:"";const opportunity=det.analysis?.commercial_observation||"";const confidence=hook&&strength&&opportunity?68:40;return {hook,strength,opportunity,confidence,usable:confidence>=65}}function normalizePersonalization(p,facts,det){const f=fallbackPersonalization(facts,det),confidence=clamp(Number(p?.confidence||f.confidence),0,100),hook=String(p?.hook||f.hook||"").trim(),strength=String(p?.strength||f.strength||"").trim(),opportunity=String(p?.opportunity||f.opportunity||"").trim();return {hook,strength,opportunity,confidence,usable:Boolean(p?.usable)&&confidence>=65&&hook.length>8&&strength.length>8&&opportunity.length>8}}function mergeAssessment(facts, det, ai, visual = null) {
   if (!ai) {
     return {
       hostname:facts.hostname,
@@ -679,6 +685,7 @@ function mergeAssessment(facts, det, ai, visual = null) {
       ...det,
       confidence:det.confidence || deterministicConfidence(facts, visual),
       visual:safeVisualForClient(visual),
+      personalization:fallbackPersonalization(facts,det),
       ai_used:false
     };
   }
@@ -717,6 +724,7 @@ function mergeAssessment(facts, det, ai, visual = null) {
     },
     confidence:normalizeConfidence(ai.confidence, facts, visual),
     visual:safeVisualForClient(visual),
+    personalization:normalizePersonalization(ai.personalization,facts,det),
     visual_findings:Array.isArray(ai.visual_findings) ? ai.visual_findings.slice(0,5) : [],
     ai_used:true
   };
